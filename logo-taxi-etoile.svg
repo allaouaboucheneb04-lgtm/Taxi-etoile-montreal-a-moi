@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800">
+<rect width="100%" height="100%" fill="#111122"/>
+<polygon points="400,120 455,300 650,300 495,410 550,620 400,500 250,620 305,410 150,300 345,300"
+fill="#FFD700"/>
+<rect x="180" y="640" width="440" height="80" rx="25" fill="#FFD700"/>
+<text x="140" y="780" font-size="64" fill="white" font-family="Arial" font-weight="bold">
+TAXI ETOILE
+</text>
+</svg>

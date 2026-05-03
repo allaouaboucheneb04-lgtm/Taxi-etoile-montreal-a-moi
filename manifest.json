@@ -1,0 +1,27 @@
+{
+  "name": "Taxi Etoile",
+  "short_name": "Taxi Etoile",
+  "description": "Taxi à Sorel-Tracy, Montréal et aéroport. Réservation rapide 24/7.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFCA28",
+  "theme_color": "#FFCA28",
+  "orientation": "portrait",
+  "lang": "fr-CA",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "./"
+}

@@ -1,0 +1,298 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function adminDoc(uid) {
+      return /databases/$(database)/documents/admins/$(uid);
+    }
+
+    function driverDoc(uid) {
+      return /databases/$(database)/documents/drivers/$(uid);
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(adminDoc(request.auth.uid))
+        && get(adminDoc(request.auth.uid)).data.active == true;
+    }
+
+    function isSuperAdmin() {
+      return isAdmin()
+        && get(adminDoc(request.auth.uid)).data.role == "superadmin";
+    }
+
+    function isDriver() {
+      return signedIn()
+        && exists(driverDoc(request.auth.uid))
+        && get(driverDoc(request.auth.uid)).data.active == true;
+    }
+
+    function isOwnUserDoc(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isOwnDriverDoc(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function reservationBelongsToDriver() {
+      return isDriver()
+        && resource.data.driverId == request.auth.uid;
+    }
+
+    function reservationWillStillBelongToDriver() {
+      return isDriver()
+        && request.resource.data.driverId == request.auth.uid;
+    }
+
+    function isNumberField(v) {
+      return v is int || v is float;
+    }
+
+    function reservationAllowedCreateKeys() {
+      return request.resource.data.keys().hasOnly([
+        "clientName",
+        "phone",
+        "email",
+        "pickup",
+        "dropoff",
+        "date",
+        "time",
+        "datetime",
+        "notes",
+        "vehicleType",
+        "passengers",
+        "luggage",
+        "flightNumber",
+        "roundTrip",
+        "returnDate",
+        "returnTime",
+        "price",
+        "driverId",
+        "status",
+        "createdAt",
+        "source"
+      ]);
+    }
+
+    function validReservationStatusOnCreate() {
+      return !("status" in request.resource.data)
+        || request.resource.data.status in ["pending", "quote_request"];
+    }
+
+    function validReservationStatusOnUpdate() {
+      return !("status" in request.resource.data)
+        || request.resource.data.status in [
+          "pending",
+          "quote_request",
+          "assigned",
+          "accepted",
+          "on_the_way",
+          "completed",
+          "cancelled"
+        ];
+    }
+
+    function validReservationCreateData() {
+      return reservationAllowedCreateKeys()
+        && ("clientName" in request.resource.data)
+        && request.resource.data.clientName is string
+        && request.resource.data.clientName.size() >= 2
+        && request.resource.data.clientName.size() <= 100
+        && ("phone" in request.resource.data)
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 7
+        && request.resource.data.phone.size() <= 25
+        && ("pickup" in request.resource.data)
+        && request.resource.data.pickup is string
+        && request.resource.data.pickup.size() >= 3
+        && request.resource.data.pickup.size() <= 250
+        && ("dropoff" in request.resource.data)
+        && request.resource.data.dropoff is string
+        && request.resource.data.dropoff.size() >= 2
+        && request.resource.data.dropoff.size() <= 250
+        && (!("email" in request.resource.data)
+          || (request.resource.data.email is string
+          && request.resource.data.email.size() <= 150))
+        && (!("date" in request.resource.data)
+          || (request.resource.data.date is string
+          && request.resource.data.date.size() <= 30))
+        && (!("time" in request.resource.data)
+          || (request.resource.data.time is string
+          && request.resource.data.time.size() <= 20))
+        && (!("datetime" in request.resource.data)
+          || (request.resource.data.datetime is string
+          && request.resource.data.datetime.size() <= 50))
+        && (!("notes" in request.resource.data)
+          || (request.resource.data.notes is string
+          && request.resource.data.notes.size() <= 1000))
+        && (!("vehicleType" in request.resource.data)
+          || (request.resource.data.vehicleType is string
+          && request.resource.data.vehicleType.size() <= 50))
+        && (!("passengers" in request.resource.data)
+          || isNumberField(request.resource.data.passengers))
+        && (!("luggage" in request.resource.data)
+          || isNumberField(request.resource.data.luggage))
+        && (!("flightNumber" in request.resource.data)
+          || (request.resource.data.flightNumber is string
+          && request.resource.data.flightNumber.size() <= 50))
+        && (!("roundTrip" in request.resource.data)
+          || request.resource.data.roundTrip is bool)
+        && (!("returnDate" in request.resource.data)
+          || (request.resource.data.returnDate is string
+          && request.resource.data.returnDate.size() <= 30))
+        && (!("returnTime" in request.resource.data)
+          || (request.resource.data.returnTime is string
+          && request.resource.data.returnTime.size() <= 20))
+        && (!("price" in request.resource.data)
+          || isNumberField(request.resource.data.price))
+        && (!("driverId" in request.resource.data)
+          || request.resource.data.driverId == null)
+        && (!("source" in request.resource.data)
+          || (request.resource.data.source is string
+          && request.resource.data.source.size() <= 50))
+        && validReservationStatusOnCreate();
+    }
+
+    function driverReservationUpdateAllowedFields() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "status",
+        "driverNotes",
+        "acceptedAt",
+        "arrivedAt",
+        "completedAt"
+      ]);
+    }
+
+    function driverReservationUpdateIsValid() {
+      return reservationBelongsToDriver()
+        && reservationWillStillBelongToDriver()
+        && driverReservationUpdateAllowedFields()
+        && request.resource.data.status in [
+          "accepted",
+          "on_the_way",
+          "completed",
+          "cancelled"
+        ];
+    }
+
+    function validAdminDoc() {
+      return request.resource.data.keys().hasOnly([
+        "name",
+        "email",
+        "role",
+        "active",
+        "createdAt"
+      ])
+      && request.resource.data.name is string
+      && request.resource.data.name.size() >= 2
+      && request.resource.data.name.size() <= 100
+      && request.resource.data.email is string
+      && request.resource.data.email.size() >= 5
+      && request.resource.data.email.size() <= 150
+      && request.resource.data.role in ["superadmin", "admin"]
+      && request.resource.data.active is bool;
+    }
+
+    function validDriverDoc() {
+      return request.resource.data.keys().hasOnly([
+        "name",
+        "email",
+        "phone",
+        "active",
+        "createdAt",
+        "carModel",
+        "plate",
+        "photoUrl"
+      ])
+      && request.resource.data.name is string
+      && request.resource.data.name.size() >= 2
+      && request.resource.data.name.size() <= 100
+      && request.resource.data.email is string
+      && request.resource.data.email.size() >= 5
+      && request.resource.data.email.size() <= 150
+      && request.resource.data.phone is string
+      && request.resource.data.phone.size() >= 7
+      && request.resource.data.phone.size() <= 25
+      && request.resource.data.active is bool
+      && (!("carModel" in request.resource.data)
+        || (request.resource.data.carModel is string
+        && request.resource.data.carModel.size() <= 100))
+      && (!("plate" in request.resource.data)
+        || (request.resource.data.plate is string
+        && request.resource.data.plate.size() <= 30))
+      && (!("photoUrl" in request.resource.data)
+        || (request.resource.data.photoUrl is string
+        && request.resource.data.photoUrl.size() <= 500));
+    }
+
+    function driverSelfUpdateAllowed() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        "phone",
+        "photoUrl"
+      ]);
+    }
+
+    function validUserDoc() {
+      return request.resource.data.keys().hasOnly([
+        "name",
+        "email",
+        "phone",
+        "createdAt"
+      ])
+      && (!("name" in request.resource.data)
+        || (request.resource.data.name is string
+        && request.resource.data.name.size() <= 100))
+      && (!("email" in request.resource.data)
+        || (request.resource.data.email is string
+        && request.resource.data.email.size() <= 150))
+      && (!("phone" in request.resource.data)
+        || (request.resource.data.phone is string
+        && request.resource.data.phone.size() <= 25));
+    }
+
+    match /reservations/{reservationId} {
+      allow create: if validReservationCreateData();
+      allow read: if isAdmin();
+      allow read: if reservationBelongsToDriver();
+      allow update: if isAdmin() && validReservationStatusOnUpdate();
+      allow update: if driverReservationUpdateIsValid();
+      allow delete: if isAdmin();
+    }
+
+    match /admins/{uid} {
+      allow read: if isAdmin();
+      allow create: if false;
+      allow update: if isSuperAdmin() && validAdminDoc();
+      allow delete: if false;
+    }
+
+    match /drivers/{uid} {
+      allow read: if isAdmin();
+      allow read: if isOwnDriverDoc(uid);
+      allow create: if isAdmin() && validDriverDoc();
+      allow update: if isAdmin() && validDriverDoc();
+      allow update: if isOwnDriverDoc(uid) && driverSelfUpdateAllowed();
+      allow delete: if isAdmin();
+    }
+
+    match /users/{uid} {
+      allow read: if isAdmin() || isOwnUserDoc(uid);
+      allow create: if isOwnUserDoc(uid) && validUserDoc();
+      allow update: if (isAdmin() || isOwnUserDoc(uid)) && validUserDoc();
+      allow delete: if isAdmin();
+    }
+
+    match /settings/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
