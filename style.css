@@ -347,3 +347,44 @@ input:focus,select:focus,textarea:focus{
   html{scroll-padding-top:105px}
   #reservationForm{scroll-margin-top:105px}
 }
+
+
+/* FINAL HEADER FIX */
+.topbar{
+  overflow:hidden !important;
+}
+
+.brand{
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+}
+
+.brand img{
+  width:180px !important;
+  max-width:100% !important;
+  object-fit:contain !important;
+  object-position:left center !important;
+}
+
+.call-btn{
+  flex-shrink:0 !important;
+}
+
+@media(max-width:768px){
+
+  .topbar{
+    padding:10px 14px !important;
+  }
+
+  .brand img{
+    width:160px !important;
+  }
+
+  .call-btn{
+    padding:12px 18px !important;
+    font-size:16px !important;
+    border-radius:18px !important;
+  }
+}
