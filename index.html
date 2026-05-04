@@ -41,8 +41,39 @@
       </div>
     </div>
 
-    <div class="hero-car-card">
-      <img src="images/toyota-sienna-2023-bonjour.jpg" alt="Véhicule taxi Étoile Taxi Montréal">
+    <div class="hero-car-card hero-carousel-card">
+      <div class="vehicle-carousel" id="vehicleCarousel">
+        <div class="vehicle-slide active">
+          <img src="images/toyota-sienna-2023-bonjour.jpg" alt="Toyota Sienna 2023 Taxi Étoile">
+          <div class="slide-caption">
+            <strong>Toyota Sienna 2023</strong>
+            <span>Idéal familles, groupes et bagages</span>
+          </div>
+        </div>
+
+        <div class="vehicle-slide">
+          <img src="images/hyundai-kona-2022-bonjour.jpg" alt="Hyundai Kona Electric 2022 Taxi Étoile">
+          <div class="slide-caption">
+            <strong>Hyundai Kona Electric 2022</strong>
+            <span>Compact, confortable et économique</span>
+          </div>
+        </div>
+
+        <div class="vehicle-slide">
+          <img src="images/toyota-sienna-2023-bonjour.jpg" alt="Réservation à l’avance Taxi Étoile">
+          <div class="slide-caption">
+            <strong>Réservation à l’avance</strong>
+            <span>Disponible pour aéroport, retour et longue distance</span>
+          </div>
+        </div>
+
+        <div class="carousel-dots">
+          <button type="button" class="active" data-slide="0"></button>
+          <button type="button" data-slide="1"></button>
+          <button type="button" data-slide="2"></button>
+        </div>
+      </div>
+
       <div class="advance-pill">📅 Réservation à l’avance disponible</div>
     </div>
   </section>
@@ -228,5 +259,37 @@
 <script src="firebase-config.js"></script>
 <script src="mail.js"></script>
 <script type="module" src="main.js"></script>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.vehicle-slide');
+  const dots = document.querySelectorAll('.carousel-dots button');
+  if(!slides.length) return;
+
+  let current = 0;
+  let timer = null;
+
+  function showSlide(index){
+    current = index;
+    slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+  }
+
+  function nextSlide(){
+    showSlide((current + 1) % slides.length);
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      showSlide(i);
+      clearInterval(timer);
+      timer = setInterval(nextSlide, 3000);
+    });
+  });
+
+  timer = setInterval(nextSlide, 3000);
+})();
+</script>
+
 </body>
 </html>
