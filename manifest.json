@@ -1,7 +1,7 @@
 {
   "name": "Taxi Etoile",
   "short_name": "Taxi Etoile",
-  "description": "Taxi à Sorel-Tracy, Montréal et aéroport. Réservation rapide 24/7.",
+  "description": "Taxi à Montreal, Montréal et aéroport. Réservation rapide 24/7.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -17,6 +17,27 @@
 <link href="icons/apple-touch-icon.png" rel="apple-touch-icon"/>
 <link href="style.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+<style>
+body{
+background:linear-gradient(135deg,#0f172a,#111827)!important;
+color:white!important;
+font-family:Arial,sans-serif!important;
+}
+button,.btn{
+background:#facc15!important;
+color:black!important;
+border:none!important;
+border-radius:14px!important;
+font-weight:bold!important;
+}
+.card,.box,.container{
+border-radius:22px!important;
+}
+h1,h2,h3{
+color:#facc15!important;
+}
+</style>
 </head>
 <body class="admin-pro-app">
 <header class="hero admin-hero">
@@ -79,10 +100,10 @@
 <div class="ops-card-header"><div><h3>Contrôle du site client</h3><p class="small-muted">Active/masque le bouton appeler, change le numéro et les messages du site.</p></div></div>
 <form class="settings-grid" id="siteSettingsForm">
 <label class="settings-field"><span>Nom du service</span><input id="siteServiceName" placeholder="Taxi Etoile" type="text"/></label>
-<label class="settings-field"><span>Téléphone cliquable</span><input id="sitePhone" placeholder="+15148674616" type="text"/></label>
-<label class="settings-field"><span>Téléphone affiché</span><input id="siteDisplayPhone" placeholder="+1 (514) 867-4616" type="text"/></label>
+<label class="settings-field"><span>Téléphone cliquable</span><input id="sitePhone" placeholder="" type="text"/></label>
+<label class="settings-field"><span>Téléphone affiché</span><input id="siteDisplayPhone" placeholder="" type="text"/></label>
 <label class="settings-field"><span>Email de contact</span><input id="siteSupportEmail" placeholder="taxilivesoreltracy@gmail.com" type="email"/></label>
-<label class="settings-field full"><span>Message d'accueil</span><input id="siteHeroTagline" placeholder="Votre taxi local à Sorel-Tracy, Montréal et aéroport 24/7" type="text"/></label>
+<label class="settings-field full"><span>Message d'accueil</span><input id="siteHeroTagline" placeholder="Votre taxi local à Montreal, Montréal et aéroport 24/7" type="text"/></label>
 <label class="settings-field"><span>Texte bouton réserver</span><input id="siteReserveButtonLabel" placeholder="Réserver" type="text"/></label>
 <label class="settings-field"><span>Texte bouton appeler</span><input id="siteCallButtonLabel" placeholder="Appeler" type="text"/></label>
 <label class="settings-field full"><span>Message si réservations fermées</span><textarea id="siteDisabledMessage" placeholder="Les réservations en ligne sont fermées pour le moment. Appelez-nous directement." rows="3"></textarea></label>
@@ -100,13 +121,13 @@
 <div class="site-preview-card">
 <div class="site-preview-top">
 <strong id="sitePreviewName">Taxi Etoile</strong>
-<p id="sitePreviewTagline">Votre taxi local à Sorel-Tracy, Montréal et aéroport 24/7</p>
+<p id="sitePreviewTagline">Votre taxi local à Montreal, Montréal et aéroport 24/7</p>
 </div>
 <div class="site-preview-actions">
 <button class="hero-btn primary" type="button"><span id="sitePreviewReserve">Réserver</span></button>
 <a class="hero-btn secondary" href="#" id="sitePreviewCall"><i class="fa fa-phone"></i> Appeler</a>
 </div>
-<p class="small-muted">Téléphone affiché : <span id="sitePreviewPhone">+1 (514) 867-4616</span></p>
+<p class="small-muted">Téléphone affiché : <span id="sitePreviewPhone"></span></p>
 </div>
 </section>
 </main>

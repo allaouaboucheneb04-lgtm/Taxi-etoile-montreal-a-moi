@@ -65,9 +65,9 @@ function buildReservationEmailParams(baseReservation, extras = {}) {
   const retour = formatDatetimeForEmail(extras.retourHeure || '');
   const siteUrl = resolveBaseSiteUrl();
   const appUrl = TAXI_APP_INSTALL_URL || siteUrl;
-  const reviewUrl = TAXI_GOOGLE_REVIEW_URL || 'https://www.google.com/search?q=Taxi+Live+Sorel-Tracy+avis';
+  const reviewUrl = TAXI_GOOGLE_REVIEW_URL || 'https://www.google.com/search?q=Taxi+Live+Montreal+avis';
   const serviceName = siteSettings?.serviceName || DEFAULT_SITE_SETTINGS.serviceName || 'Taxi Etoile';
-  const displayPhone = siteSettings?.displayPhone || DEFAULT_SITE_SETTINGS.displayPhone || '+1 (514) 867-4616';
+  const displayPhone = siteSettings?.displayPhone || DEFAULT_SITE_SETTINGS.displayPhone || '';
   const supportEmail = siteSettings?.supportEmail || DEFAULT_SITE_SETTINGS.supportEmail || '';
   const tripTypeLabel = extras.allerRetour ? 'Aller-retour' : 'Aller simple';
   const notesValue = [baseReservation.notes || '', extras.retourDetails || ''].filter(Boolean).join(' | ');
@@ -198,13 +198,13 @@ const SITE_SETTINGS_COLLECTION = 'settings';
 const SITE_SETTINGS_DOC = 'site';
 const DEFAULT_SITE_SETTINGS = {
   serviceName: 'Taxi Etoile',
-  phone: '+15148674616',
-  displayPhone: '+1 (514) 867-4616',
+  phone: '',
+  displayPhone: '',
   showCallButton: true,
   supportEmail: 'taxilivesoreltracy@gmail.com',
   reservationsEnabled: true,
   disabledMessage: 'Les réservations en ligne sont fermées pour le moment. Appelez-nous directement.',
-  heroTagline: 'Votre taxi local à Sorel-Tracy, Montréal et aéroport 24/7',
+  heroTagline: 'Votre taxi local à Montreal, Montréal et aéroport 24/7',
   callButtonLabel: 'Appeler',
   reserveButtonLabel: 'Réserver'
 };
@@ -661,7 +661,7 @@ function rankSuggestionsByPriority(query, items) {
   const q = (query || '').toLowerCase().trim();
   const nearby = [
     ['sorel', 18],
-    ['sorel-tracy', 20],
+    ['Montreal', 20],
     ['tracy', 12],
     ['saint-joseph-de-sorel', 12],
     ['saint-joseph', 8],
@@ -681,7 +681,7 @@ function rankSuggestionsByPriority(query, items) {
 
   const queryBoosts = [
     { test: /aer|aéro|aero|yul|trud|dorv/, matches: ['aéroport', 'aeroport', 'trudeau', 'yul', 'dorval'], boost: 30 },
-    { test: /sor|tra/, matches: ['sorel', 'sorel-tracy', 'tracy'], boost: 24 },
+    { test: /sor|tra/, matches: ['sorel', 'Montreal', 'tracy'], boost: 24 },
     { test: /gar|centr/, matches: ['gare centrale'], boost: 26 },
     { test: /mon|cent/, matches: ['montreal', 'montréal', 'centre-ville de montréal'], boost: 16 }
   ];
@@ -1508,7 +1508,28 @@ function printDispatchPlanning() {
       table{width:100%;border-collapse:collapse}
       th,td{border:1px solid #ddd;padding:8px;font-size:12px;text-align:left;vertical-align:top}
       th{background:#f4f4f4}
-    </style></head><body>
+    </style>
+<style>
+body{
+background:linear-gradient(135deg,#0f172a,#111827)!important;
+color:white!important;
+font-family:Arial,sans-serif!important;
+}
+button,.btn{
+background:#facc15!important;
+color:black!important;
+border:none!important;
+border-radius:14px!important;
+font-weight:bold!important;
+}
+.card,.box,.container{
+border-radius:22px!important;
+}
+h1,h2,h3{
+color:#facc15!important;
+}
+</style>
+</head><body>
       <h1>Planning Dispatch - Taxi Etoile</h1>
       <p>Généré le ${escapeHtml(formatDateTime(new Date()))}</p>
       <table>
