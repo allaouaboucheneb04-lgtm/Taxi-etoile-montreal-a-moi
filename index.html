@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Étoile Taxi Montréal | Réservation taxi</title>
-  <meta name="description" content="Étoile Taxi Montréal. Réservation taxi simple pour aéroport Montréal, service adapté, longue distance et courses locales.">
-  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Réservez votre taxi à Montréal avec Étoile Taxi. Aéroport YUL, service adapté, longue distance et réservation à l’avance.">
+  <meta name="theme-color" content="#080808">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
@@ -18,40 +18,32 @@
   <a class="brand" href="#home">
     <img src="logo-taxi-etoile.png" alt="Étoile Taxi Montréal">
   </a>
-  <nav class="nav">
-    <a href="#home">Accueil</a>
-    <a href="#reservationForm">Réservation</a>
-    <a href="#services">Services</a>
-    <a href="#vehicules">Véhicules</a>
-  </nav>
   <a class="call-btn" href="#reservationForm">Réserver</a>
 </header>
 
 <main id="home">
-  <section class="hero-poster">
-    <div class="hero-content">
+  <section class="hero-clean">
+    <div class="hero-copy">
       <div class="badge">Service de taxi à Montréal</div>
       <h1>Votre confort,<br><span>notre priorité.</span></h1>
-      <p>Transferts fiables, sécuritaires et ponctuels. Réservation en ligne simple pour vos trajets locaux, aéroport et longue distance.</p>
+      <p>Réservation simple, trajets fiables, chauffeurs professionnels et véhicules propres.</p>
 
-      <div class="service-icons">
-        <div><span>✈️</span><strong>Aéroport Montréal</strong></div>
-        <div><span>♿</span><strong>Service adapté</strong></div>
-        <div><span>📍</span><strong>Longue distance</strong></div>
-        <div><span>24/7</span><strong>Disponible</strong></div>
+      <div class="hero-actions">
+        <a href="#reservationForm" class="primary-action">Réservation en ligne</a>
+        <a href="#vehicules" class="secondary-action">Voir les véhicules</a>
       </div>
 
-      <a class="hero-action" href="#reservationForm">Réservation en ligne →</a>
+      <div class="mini-services">
+        <div><b>✈️</b><span>Aéroport YUL</span></div>
+        <div><b>♿</b><span>Service adapté</span></div>
+        <div><b>📍</b><span>Longue distance</span></div>
+        <div><b>24/7</b><span>Disponible</span></div>
+      </div>
     </div>
 
-    <div class="hero-cars">
-      <img src="images/voitures-etoile-taxi.jpg" alt="Véhicules Étoile Taxi Montréal">
-    </div>
-
-    <div class="advance-box">
-      <span>📅</span>
-      <strong>Réservation<br>à l’avance</strong>
-      <em>Disponible</em>
+    <div class="hero-car-card">
+      <img src="images/toyota-sienna-clean.png" alt="Véhicule taxi Étoile Taxi Montréal">
+      <div class="advance-pill">📅 Réservation à l’avance disponible</div>
     </div>
   </section>
 
@@ -206,12 +198,12 @@
         <span>Je confirme que les informations sont correctes.</span>
       </label>
 
-      <button class="submit-btn" type="submit">Envoyer la réservation →</button>
+      <button class="submit-btn" type="submit">Envoyer la réservation</button>
       <p class="secure-note">🔒 Vos informations sont 100% sécurisées.</p>
     </form>
   </section>
 
-  <section class="trust-strip" id="services">
+  <section class="trust-strip">
     <div><span>🛡️</span><strong>Sécuritaire</strong><p>Votre sécurité avant tout</p></div>
     <div><span>👨‍✈️</span><strong>Chauffeurs professionnels</strong><p>Courtois et expérimentés</p></div>
     <div><span>🚕</span><strong>Véhicules propres</strong><p>Confort garanti</p></div>
@@ -222,13 +214,13 @@
     <h2>Nos véhicules</h2>
     <div class="vehicle-grid">
       <article class="vehicle-card">
-        <img src="images/toyota-sienna-taxi.jpg" alt="Toyota Sienna taxi">
+        <img src="images/toyota-sienna-clean.png" alt="Toyota Sienna taxi">
         <h3>Toyota Sienna</h3>
         <p>Idéal pour familles, groupes et bagages.</p>
         <button class="choose-car" data-car="van" type="button">Choisir ce véhicule</button>
       </article>
       <article class="vehicle-card">
-        <img src="images/hyundai-kona-taxi.jpg" alt="Hyundai Kona taxi">
+        <img src="images/hyundai-kona-clean.png" alt="Hyundai Kona taxi">
         <h3>Hyundai Kona</h3>
         <p>Confortable, économique et parfait pour la ville.</p>
         <button class="choose-car" data-car="berline" type="button">Choisir ce véhicule</button>
