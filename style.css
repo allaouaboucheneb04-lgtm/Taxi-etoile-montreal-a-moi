@@ -434,3 +434,23 @@ input:focus,select:focus,textarea:focus{
   object-fit:contain !important;
   object-position:center center !important;
 }
+
+/* FORMULAIRE COMME AVANT */
+.retour-toggle{
+  margin-top:6px;
+  background:#fffaf0;
+  border:1px solid #eee2b8;
+  border-radius:20px;
+  padding:18px;
+}
+.retour-toggle span{
+  font-weight:950;
+}
+.retour-box{
+  margin-top:4px;
+}
+@media(max-width:900px){
+  .panel-title{
+    align-items:flex-start;
+  }
+}

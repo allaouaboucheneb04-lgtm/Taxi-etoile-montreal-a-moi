@@ -343,12 +343,10 @@ function setupAutocomplete(inputId, resultsId) {
 }
 
 function syncReturnUI() {
-  const tripType = $("tripTypeSelect");
   const allerRetour = $("allerRetour");
   const retourFields = $("retourFields");
-  const isReturn = tripType?.value === "retour" || !!allerRetour?.checked;
+  const isReturn = !!allerRetour?.checked;
 
-  if (allerRetour) allerRetour.checked = isReturn;
   retourFields?.classList.toggle("hidden", !isReturn);
 
   ["retourDepart", "retourArrivee", "heureRetour"].forEach((id) => {
@@ -370,17 +368,15 @@ function setupUI() {
 
   const form = $("reservationForm");
   if (form) form.addEventListener("submit", handleSubmit);
-
-  $("tripTypeSelect")?.addEventListener("change", syncReturnUI);
-
-  $("depart")?.addEventListener("input", () => {
-    if ($("tripTypeSelect")?.value === "retour" && !$("retourArrivee")?.dataset.edited) {
+  $("allerRetour")?.addEventListener("change", syncReturnUI);
+$("depart")?.addEventListener("input", () => {
+    if ($("allerRetour")?.checked && !$("retourArrivee")?.dataset.edited) {
       setVal("retourArrivee", val("depart"));
     }
   });
 
   $("arrivee")?.addEventListener("input", () => {
-    if ($("tripTypeSelect")?.value === "retour" && !$("retourDepart")?.dataset.edited) {
+    if ($("allerRetour")?.checked && !$("retourDepart")?.dataset.edited) {
       setVal("retourDepart", val("arrivee"));
     }
   });

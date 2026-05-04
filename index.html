@@ -58,16 +58,7 @@
 
     <form id="reservationForm">
       <div class="form-message hidden" id="formMessage"></div>
-
-      <label class="field">
-        <span>Type de trajet</span>
-        <select id="tripTypeSelect">
-          <option value="simple">Aller simple</option>
-          <option value="retour">Aller-retour</option>
-        </select>
-      </label>
-
-      <div class="grid-3">
+<div class="grid-3">
         <label class="field">
           <span>Nom complet</span>
           <input id="nom" name="nom" placeholder="Votre nom" required type="text">
@@ -149,9 +140,9 @@
         <textarea id="notes" name="notes" placeholder="Instructions, terminal, porte, bagages..." rows="3"></textarea>
       </label>
 
-      <label class="check-row hidden">
+      <label class="check-row retour-toggle">
         <input id="allerRetour" name="aller_retour" type="checkbox" value="oui">
-        <span>Ajouter un retour</span>
+        <span>Je veux réserver un retour</span>
       </label>
 
       <div class="retour-box hidden" id="retourFields">
