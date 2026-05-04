@@ -1,10 +1,10 @@
 {
-  "name": "Taxi Étoile Montréal",
-  "short_name": "Taxi Étoile",
+  "name": "Étoile Taxi Montréal",
+  "short_name": "Étoile Taxi",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#050505",
+  "theme_color": "#050505",
   "icons": [
     {
       "src": "icons/icon-192.png",

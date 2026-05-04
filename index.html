@@ -3,74 +3,96 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Taxi Étoile Montréal | Réservation rapide</title>
-  <meta name="description" content="Réservez Taxi Étoile Montréal rapidement. Formulaire simple pour taxi local, aéroport, aller simple ou aller-retour.">
-  <meta name="theme-color" content="#ffffff">
+  <title>Étoile Taxi Montréal | Réservation taxi</title>
+  <meta name="description" content="Étoile Taxi Montréal. Réservation taxi simple pour aéroport Montréal, service adapté, longue distance et courses locales.">
+  <meta name="theme-color" content="#050505">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="emailjs-config.js"></script>
 </head>
 <body>
 
 <header class="topbar">
-  <a class="brand" href="index.html">
-    <img src="logo-taxi-etoile.png" alt="Taxi Étoile">
+  <a class="brand" href="#home">
+    <img src="logo-taxi-etoile.png" alt="Étoile Taxi Montréal">
   </a>
-  <a class="mini-link" href="#reservationForm">Réserver</a>
+  <nav class="nav">
+    <a href="#home">Accueil</a>
+    <a href="#reservationForm">Réservation</a>
+    <a href="#services">Services</a>
+    <a href="#vehicules">Véhicules</a>
+  </nav>
+  <a class="call-btn" href="#reservationForm">Réserver</a>
 </header>
 
-<main>
-  <section class="hero-simple">
-    <div class="hero-text">
-      <span class="eyebrow">Taxi premium basé à Montréal</span>
-      <h1>Réservez votre taxi en moins d’une minute.</h1>
-      <p>Service local, aéroport Montréal-Trudeau, trajets planifiés et aller-retour.</p>
-      <div class="quick-points">
-        <span>✓ Simple</span>
-        <span>✓ Rapide</span>
-        <span>✓ Confirmation email</span>
+<main id="home">
+  <section class="hero-poster">
+    <div class="hero-content">
+      <div class="badge">Service de taxi à Montréal</div>
+      <h1>Votre confort,<br><span>notre priorité.</span></h1>
+      <p>Transferts fiables, sécuritaires et ponctuels. Réservation en ligne simple pour vos trajets locaux, aéroport et longue distance.</p>
+
+      <div class="service-icons">
+        <div><span>✈️</span><strong>Aéroport Montréal</strong></div>
+        <div><span>♿</span><strong>Service adapté</strong></div>
+        <div><span>📍</span><strong>Longue distance</strong></div>
+        <div><span>24/7</span><strong>Disponible</strong></div>
+      </div>
+
+      <a class="hero-action" href="#reservationForm">Réservation en ligne →</a>
+    </div>
+
+    <div class="hero-cars">
+      <img src="images/voitures-etoile-taxi.jpg" alt="Véhicules Étoile Taxi Montréal">
+    </div>
+
+    <div class="advance-box">
+      <span>📅</span>
+      <strong>Réservation<br>à l’avance</strong>
+      <em>Disponible</em>
+    </div>
+  </section>
+
+  <section class="reservation-panel">
+    <div class="panel-title">
+      <span>📅</span>
+      <div>
+        <h2>Réservez votre taxi</h2>
+        <p>Rapide, simple et sécuritaire</p>
       </div>
     </div>
 
-    <section class="reservation-card" aria-label="Formulaire de réservation">
-      <div class="form-head">
-        <h2>Réservation</h2>
-        <p>Remplissez les informations et envoyez votre demande.</p>
-      </div>
+    <form id="reservationForm">
+      <div class="form-message hidden" id="formMessage"></div>
 
-      <form id="reservationForm">
-        <div class="grid-2">
-          <label class="field">
-            <span>Nom complet</span>
-            <input id="nom" name="nom" placeholder="Votre nom" required type="text">
-          </label>
+      <label class="field">
+        <span>Type de trajet</span>
+        <select id="tripTypeSelect">
+          <option value="simple">Aller simple</option>
+          <option value="retour">Aller-retour</option>
+        </select>
+      </label>
 
-          <label class="field">
-            <span>Téléphone</span>
-            <input id="telephone" name="telephone" placeholder="Votre téléphone" required type="tel">
-          </label>
-        </div>
+      <div class="grid-3">
+        <label class="field">
+          <span>Nom complet</span>
+          <input id="nom" name="nom" placeholder="Votre nom" required type="text">
+        </label>
+
+        <label class="field">
+          <span>Téléphone</span>
+          <input id="telephone" name="telephone" placeholder="Votre téléphone" required type="tel">
+        </label>
 
         <label class="field">
           <span>Email</span>
           <input id="email" name="email" placeholder="votre@email.com" required type="email">
         </label>
+      </div>
 
-        <div class="grid-2">
-          <label class="field">
-            <span>Nombre de passagers</span>
-            <input id="passagers" name="passagers" min="1" value="1" required type="number">
-          </label>
-
-          <label class="field">
-            <span>Numéro de vol</span>
-            <input id="numeroVol" name="numero_vol" placeholder="Optionnel" type="text">
-          </label>
-        </div>
-
+      <div class="grid-2">
         <label class="field">
           <span>Adresse de départ</span>
           <div class="autocomplete-wrap">
@@ -86,57 +108,64 @@
             <div class="autocomplete" id="arrivee-results"></div>
           </div>
         </label>
+      </div>
 
-        <div class="quick-destinations">
-          <p>Destinations rapides</p>
-          <div>
-            <button class="quick-destination-btn" data-address="YUL-Aéroport-Montréal-Trudeau, Dorval, Québec, Canada" data-target="arrivee" type="button">Aéroport YUL</button>
-            <button class="quick-destination-btn" data-address="Centre-ville de Montréal, Montréal, Québec, Canada" data-target="arrivee" type="button">Centre-ville</button>
-            <button class="quick-destination-btn" data-address="Gare Centrale, Montréal, Québec, Canada" data-target="arrivee" type="button">Gare Centrale</button>
-            <button class="quick-destination-btn" data-address="Longueuil, Québec, Canada" data-target="arrivee" type="button">Longueuil</button>
-          </div>
+      <div class="quick-destinations">
+        <strong>Destinations rapides</strong>
+        <div>
+          <button class="quick-destination-btn" data-address="YUL-Aéroport-Montréal-Trudeau, Dorval, Québec, Canada" data-target="arrivee" type="button">Aéroport YUL</button>
+          <button class="quick-destination-btn" data-address="Centre-ville de Montréal, Montréal, Québec, Canada" data-target="arrivee" type="button">Centre-ville</button>
+          <button class="quick-destination-btn" data-address="Gare Centrale, Montréal, Québec, Canada" data-target="arrivee" type="button">Gare Centrale</button>
+          <button class="quick-destination-btn" data-address="Longueuil, Québec, Canada" data-target="arrivee" type="button">Longueuil</button>
         </div>
+      </div>
 
-        <div class="datetime-block">
-          <div class="field-label-row">
-            <label class="label-field" for="heure">Date et heure</label>
-            <span class="field-hint">Choisissez le moment de prise en charge</span>
-          </div>
-          <div class="datetime-quick-actions">
-            <button class="datetime-chip" data-mode="now" data-target="heure" type="button">Maintenant</button>
-            <button class="datetime-chip" data-mode="later" data-target="heure" type="button">Programmer</button>
-          </div>
+      <div class="grid-3">
+        <label class="field">
+          <span>Date et heure</span>
           <input id="heure" name="heure" required type="datetime-local">
-        </div>
-
-        <div class="grid-2">
-          <label class="field">
-            <span>Véhicule</span>
-            <select id="vehicule" name="vehicule">
-              <option value="berline">Berline</option>
-              <option value="van">Van</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span>Valises</span>
-            <input id="valises" min="0" name="valises" value="0" type="number">
-          </label>
-        </div>
+        </label>
 
         <label class="field">
-          <span>Notes</span>
-          <textarea id="notes" name="notes" placeholder="Instructions, terminal, porte, bagages..." rows="3"></textarea>
+          <span>Passagers</span>
+          <input id="passagers" name="passagers" min="1" value="1" required type="number">
         </label>
 
-        <label class="check-row">
-          <input id="allerRetour" name="aller_retour" type="checkbox" value="oui">
-          <span>Ajouter un retour</span>
+        <label class="field">
+          <span>Numéro de vol</span>
+          <input id="numeroVol" name="numero_vol" placeholder="Optionnel" type="text">
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label class="field">
+          <span>Véhicule</span>
+          <select id="vehicule" name="vehicule">
+            <option value="berline">Berline</option>
+            <option value="van">Van</option>
+          </select>
         </label>
 
-        <div class="retour-box hidden" id="retourFields">
-          <h3>Informations du retour</h3>
+        <label class="field">
+          <span>Valises</span>
+          <input id="valises" min="0" name="valises" value="0" type="number">
+        </label>
+      </div>
 
+      <label class="field">
+        <span>Notes</span>
+        <textarea id="notes" name="notes" placeholder="Instructions, terminal, porte, bagages..." rows="3"></textarea>
+      </label>
+
+      <label class="check-row hidden">
+        <input id="allerRetour" name="aller_retour" type="checkbox" value="oui">
+        <span>Ajouter un retour</span>
+      </label>
+
+      <div class="retour-box hidden" id="retourFields">
+        <h3>Informations du retour</h3>
+
+        <div class="grid-2">
           <label class="field">
             <span>Adresse de départ du retour</span>
             <div class="autocomplete-wrap">
@@ -152,42 +181,66 @@
               <div class="autocomplete" id="retour-arrivee-results"></div>
             </div>
           </label>
+        </div>
 
-          <div class="grid-2">
-            <label class="field">
-              <span>Date et heure du retour</span>
-              <input id="heureRetour" name="heure_retour" type="datetime-local">
-            </label>
-
-            <label class="field">
-              <span>Numéro de vol retour</span>
-              <input id="retourNumeroVol" name="retour_numero_vol" placeholder="Optionnel" type="text">
-            </label>
-          </div>
+        <div class="grid-2">
+          <label class="field">
+            <span>Date et heure du retour</span>
+            <input id="heureRetour" name="heure_retour" type="datetime-local">
+          </label>
 
           <label class="field">
-            <span>Notes retour</span>
-            <textarea id="notesRetour" name="notes_retour" rows="2" placeholder="Instructions pour le retour, terminal, porte, bagages..."></textarea>
+            <span>Numéro de vol retour</span>
+            <input id="retourNumeroVol" name="retour_numero_vol" placeholder="Optionnel" type="text">
           </label>
         </div>
 
-        <div class="confirm-box">
-          <label class="check-row">
-            <input id="confirmationCheck" required type="checkbox">
-            <span>Je confirme que les informations sont correctes.</span>
-          </label>
-        </div>
+        <label class="field">
+          <span>Notes retour</span>
+          <textarea id="notesRetour" name="notes_retour" rows="2" placeholder="Instructions pour le retour, terminal, porte, bagages..."></textarea>
+        </label>
+      </div>
 
-        <button class="submit-btn" type="submit">Envoyer la réservation</button>
-        <p class="helper">Vous recevrez une confirmation par email après l’envoi.</p>
-      </form>
-    </section>
+      <label class="check-row confirm">
+        <input id="confirmationCheck" required type="checkbox">
+        <span>Je confirme que les informations sont correctes.</span>
+      </label>
+
+      <button class="submit-btn" type="submit">Envoyer la réservation →</button>
+      <p class="secure-note">🔒 Vos informations sont 100% sécurisées.</p>
+    </form>
+  </section>
+
+  <section class="trust-strip" id="services">
+    <div><span>🛡️</span><strong>Sécuritaire</strong><p>Votre sécurité avant tout</p></div>
+    <div><span>👨‍✈️</span><strong>Chauffeurs professionnels</strong><p>Courtois et expérimentés</p></div>
+    <div><span>🚕</span><strong>Véhicules propres</strong><p>Confort garanti</p></div>
+    <div><span>🕘</span><strong>Disponible 24/7</strong><p>Jour et nuit</p></div>
+  </section>
+
+  <section class="vehicles" id="vehicules">
+    <h2>Nos véhicules</h2>
+    <div class="vehicle-grid">
+      <article class="vehicle-card">
+        <img src="images/toyota-sienna-taxi.jpg" alt="Toyota Sienna taxi">
+        <h3>Toyota Sienna</h3>
+        <p>Idéal pour familles, groupes et bagages.</p>
+        <button class="choose-car" data-car="van" type="button">Choisir ce véhicule</button>
+      </article>
+      <article class="vehicle-card">
+        <img src="images/hyundai-kona-taxi.jpg" alt="Hyundai Kona taxi">
+        <h3>Hyundai Kona</h3>
+        <p>Confortable, économique et parfait pour la ville.</p>
+        <button class="choose-car" data-car="berline" type="button">Choisir ce véhicule</button>
+      </article>
+    </div>
   </section>
 </main>
 
-<footer>
-  <strong>Taxi Étoile Montréal</strong>
-  <span>Réservation simple et rapide</span>
+<footer class="footer">
+  <img src="logo-taxi-etoile.png" alt="Étoile Taxi Montréal">
+  <p>Étoile Taxi Montréal — votre confort, notre priorité.</p>
+  <p>etoiletaximontreal@gmail.com</p>
 </footer>
 
 <script src="firebase-config.js"></script>

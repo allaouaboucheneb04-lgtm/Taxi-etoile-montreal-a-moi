@@ -230,7 +230,7 @@ function showMessage(text, type="info"){
     form?.prepend(box);
   }
   box.textContent = text;
-  box.className = "form-message " + type;
+  box.className = "form-message " + type; box.classList.remove("hidden");
 }
 
 function setLoading(isLoading){
@@ -317,8 +317,24 @@ function setupUI(){
   const form = $("reservationForm");
   if(form) form.addEventListener("submit", handleSubmit);
 
+  const tripTypeSelect = $("tripTypeSelect");
   const retour = $("allerRetour");
   const retourFields = $("retourFields");
+
+  tripTypeSelect?.addEventListener("change", () => {
+    if(retour){
+      retour.checked = tripTypeSelect.value === "retour";
+      retour.dispatchEvent(new Event("change", { bubbles:true }));
+    }
+  });
+
+  document.querySelectorAll(".choose-car").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const vehicule = $("vehicule");
+      if(vehicule) vehicule.value = btn.dataset.car || "berline";
+      document.querySelector("#reservationForm")?.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  });
 
   function syncRetourFields(){
     if(!retour || !retourFields) return;
