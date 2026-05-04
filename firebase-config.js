@@ -1,9 +1,9 @@
 window.FIREBASE_CONFIG = {
-  apiKey: "AIzaSyAvdaO96uLe5Q6TdnH7OzahzCdprBvKDRc",
-  authDomain: "taxi-reservation-e8bab.firebaseapp.com",
-  projectId: "taxi-reservation-e8bab",
-  storageBucket: "taxi-reservation-e8bab.firebasestorage.app",
-  messagingSenderId: "33",
-  appId: "1:33:web:7c9cf709bab1fd4a9645f4",
-  measurementId: "G-2D32C716TC"
+  apiKey: "AIzaSyBU6OYKH1GNa6ijTJ_7v87jmoTpHkDQoaQ",
+  authDomain: "etoile-taxi.firebaseapp.com",
+  projectId: "etoile-taxi",
+  storageBucket: "etoile-taxi.firebasestorage.app",
+  messagingSenderId: "685451587801",
+  appId: "1:685451587801:web:b6a787fac14a3a30250ec8",
+  measurementId: "G-FLRMDHE1N0"
 };
