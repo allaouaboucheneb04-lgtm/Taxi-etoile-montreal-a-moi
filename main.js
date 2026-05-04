@@ -156,7 +156,7 @@ function buildReservation() {
     retour_arrivee: retour.dropoff,
     retour_date: retour.date,
     retour_time: retour.time,
-    retour_heure: retour.datetime || "",
+    retour_heure: retour.time || "",
     retour_numero_vol: retour.flightNumber || "",
     retour_notes: retour.notes || ""
   };
@@ -241,6 +241,19 @@ async function handleSubmit(event) {
   }
 
   setLoading(true);
+
+  // Validation retour
+  if (checked("allerRetour")) {
+    const departDate = new Date(val("heure"));
+    const retourDate = new Date(val("heureRetour"));
+
+    if (retourDate < departDate) {
+      alert("La date/heure du retour doit être après le trajet aller.");
+      setLoading(false);
+      return;
+    }
+  }
+
   showMessage("Envoi de la réservation...", "info");
 
   try {
