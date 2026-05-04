@@ -905,3 +905,18 @@ input:focus,select:focus,textarea:focus{
     height:255px !important;
   }
 }
+
+.carousel-loading{
+  height:340px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-weight:900;
+  background:#050505;
+}
+@media(max-width:900px){
+  .carousel-loading{height:280px;}
+}
+@media(max-width:430px){
+  .carousel-loading{height:255px;}
+}

@@ -42,68 +42,9 @@
     </div>
 
     <div class="hero-car-card hero-carousel-card">
-      <div class="vehicle-carousel" id="vehicleCarousel">
-
-        <div class="vehicle-slide active">
-          <img src="images/banner/banner-sienna-premium.jpg" alt="Toyota Sienna 2023">
-          <div class="slide-caption">
-            <strong>Toyota Sienna 2023</strong>
-            <span>Idéal familles, groupes et bagages</span>
-          </div>
-        </div>
-        <div class="vehicle-slide">
-          <img src="images/banner/banner-kona-premium.jpg" alt="Hyundai Kona Electric 2022">
-          <div class="slide-caption">
-            <strong>Hyundai Kona Electric 2022</strong>
-            <span>Compact, confortable et économique</span>
-          </div>
-        </div>
-        <div class="vehicle-slide">
-          <img src="images/banner/banner-aeroport.jpg" alt="Transferts aéroport">
-          <div class="slide-caption">
-            <strong>Transferts aéroport</strong>
-            <span>Ponctualité garantie pour tous vos vols</span>
-          </div>
-        </div>
-        <div class="vehicle-slide">
-          <img src="images/banner/banner-confort.jpg" alt="Confort premium">
-          <div class="slide-caption">
-            <strong>Confort premium</strong>
-            <span>Voyagez en toute tranquillité</span>
-          </div>
-        </div>
-        <div class="vehicle-slide">
-          <img src="images/banner/banner-service.jpg" alt="Service sur mesure">
-          <div class="slide-caption">
-            <strong>Service sur mesure</strong>
-            <span>Déplacements personnels et professionnels</span>
-          </div>
-        </div>
-        <div class="vehicle-slide">
-          <img src="images/banner/banner-bagages.jpg" alt="Aide aux bagages">
-          <div class="slide-caption">
-            <strong>Aide aux bagages</strong>
-            <span>Nous vous aidons avec vos valises</span>
-          </div>
-        </div>
-        <div class="vehicle-slide">
-          <img src="images/banner/toyota-sienna-2023-bonjour.jpg" alt="Toyota Sienna 2023">
-          <div class="slide-caption">
-            <strong>Toyota Sienna 2023</strong>
-            <span>Jusqu’à 6 passagers</span>
-          </div>
-        </div>
-        <div class="vehicle-slide">
-          <img src="images/banner/hyundai-kona-2022-bonjour.jpg" alt="Hyundai Kona Electric 2022">
-          <div class="slide-caption">
-            <strong>Hyundai Kona Electric 2022</strong>
-            <span>Jusqu’à 4 passagers</span>
-          </div>
-        </div>
-
-        <div class="carousel-dots">
-          <button type="button" class="active" data-slide="0"></button><button type="button" class="" data-slide="1"></button><button type="button" class="" data-slide="2"></button><button type="button" class="" data-slide="3"></button><button type="button" class="" data-slide="4"></button><button type="button" class="" data-slide="5"></button><button type="button" class="" data-slide="6"></button><button type="button" class="" data-slide="7"></button>
-        </div>
+      <div class="vehicle-carousel auto-carousel" id="vehicleCarousel">
+        <div class="carousel-loading">Chargement des photos...</div>
+        <div class="carousel-dots" id="carouselDots"></div>
       </div>
 
       <div class="advance-pill">📅 Réservation à l’avance disponible</div>
@@ -292,34 +233,108 @@
 <script src="mail.js"></script>
 <script type="module" src="main.js"></script>
 
+
 <script>
 (function(){
-  const slides = document.querySelectorAll('.vehicle-slide');
-  const dots = document.querySelectorAll('.carousel-dots button');
-  if(!slides.length) return;
+  const carousel = document.getElementById('vehicleCarousel');
+  const dotsBox = document.getElementById('carouselDots');
+  if(!carousel || !dotsBox) return;
 
-  let current = 0;
-  let timer = null;
+  const maxImages = 30;
+  const extensions = ['jpg','jpeg','png','webp'];
+  const captions = [
+    ['Toyota Sienna 2023', 'Idéal familles, groupes et bagages'],
+    ['Hyundai Kona Electric 2022', 'Compact, confortable et économique'],
+    ['Transferts aéroport', 'Ponctualité garantie pour tous vos vols'],
+    ['Confort premium', 'Voyagez en toute tranquillité'],
+    ['Service sur mesure', 'Déplacements personnels et professionnels'],
+    ['Aide aux bagages', 'Nous vous aidons avec vos valises']
+  ];
 
-  function showSlide(index){
-    current = index;
-    slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
-    dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-  }
-
-  function nextSlide(){
-    showSlide((current + 1) % slides.length);
-  }
-
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
-      showSlide(i);
-      clearInterval(timer);
-      timer = setInterval(nextSlide, 5000);
+  function imageExists(src){
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(src);
+      img.onerror = () => resolve(null);
+      img.src = src + '?v=' + Date.now();
     });
-  });
+  }
 
-  timer = setInterval(nextSlide, 5000);
+  async function findImages(){
+    const found = [];
+    for(let i = 1; i <= maxImages; i++){
+      let match = null;
+      for(const ext of extensions){
+        const src = `images/banner/banner${i}.${ext}`;
+        const ok = await imageExists(src);
+        if(ok){
+          match = src;
+          break;
+        }
+      }
+      if(match) found.push(match);
+    }
+    return found;
+  }
+
+  function buildSlides(images){
+    carousel.querySelector('.carousel-loading')?.remove();
+
+    images.forEach((src, index) => {
+      const cap = captions[index] || ['Taxi Étoile Montréal', 'Service premium à Montréal'];
+      const slide = document.createElement('div');
+      slide.className = 'vehicle-slide' + (index === 0 ? ' active' : '');
+      slide.innerHTML = `
+        <img src="${src}" alt="${cap[0]}">
+        <div class="slide-caption">
+          <strong>${cap[0]}</strong>
+          <span>${cap[1]}</span>
+        </div>
+      `;
+      carousel.insertBefore(slide, dotsBox);
+
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.dataset.slide = index;
+      if(index === 0) dot.className = 'active';
+      dotsBox.appendChild(dot);
+    });
+
+    const slides = carousel.querySelectorAll('.vehicle-slide');
+    const dots = dotsBox.querySelectorAll('button');
+    let current = 0;
+    let timer = null;
+
+    function showSlide(index){
+      current = index;
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
+    function nextSlide(){
+      showSlide((current + 1) % slides.length);
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        showSlide(i);
+        clearInterval(timer);
+        timer = setInterval(nextSlide, 5000);
+      });
+    });
+
+    if(slides.length > 1){
+      timer = setInterval(nextSlide, 5000);
+    }
+  }
+
+  findImages().then(images => {
+    if(!images.length){
+      carousel.innerHTML = '<div class="carousel-loading">Aucune photo trouvée dans images/banner/</div>';
+      return;
+    }
+    buildSlides(images);
+  });
 })();
 </script>
 
