@@ -1,96 +1,13 @@
 
-const AUTOCOMPLETE_CACHE = new Map();
-
-async function fetchAddressSuggestions(query){
-  const q = String(query || "").trim();
-  if(q.length < 3) return [];
-
-  if(AUTOCOMPLETE_CACHE.has(q)){
-    return AUTOCOMPLETE_CACHE.get(q);
-  }
-
-  try{
-    const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&addressdetails=1&q=${encodeURIComponent(q + ", Québec, Canada")}`;
-    const response = await fetch(url, {
-      headers: {
-        "Accept": "application/json"
-      }
-    });
-
-    const data = await response.json();
-
-    const results = (data || []).map(item => ({
-      label: item.display_name,
-      value: item.display_name
-    }));
-
-    AUTOCOMPLETE_CACHE.set(q, results);
-    return results;
-
-  }catch(error){
-    console.error("Autocomplete error:", error);
-    return [];
-  }
-}
-
-function closeAutocomplete(container){
-  if(container){
-    container.innerHTML = "";
-    container.style.display = "none";
-  }
-}
-
-function setupAutocomplete(inputId, resultsId){
-  const input = $(inputId);
-  const results = $(resultsId);
-
-  if(!input || !results) return;
-
-  let debounce;
-
-  input.addEventListener("input", () => {
-    clearTimeout(debounce);
-
-    const query = input.value.trim();
-
-    if(query.length < 3){
-      closeAutocomplete(results);
-      return;
-    }
-
-    debounce = setTimeout(async () => {
-      const suggestions = await fetchAddressSuggestions(query);
-
-      if(!suggestions.length){
-        closeAutocomplete(results);
-        return;
-      }
-
-      results.innerHTML = suggestions.map(item => `
-        <div class="autocomplete-item">${item.label}</div>
-      `).join("");
-
-      results.style.display = "block";
-
-      results.querySelectorAll(".autocomplete-item").forEach((el, index) => {
-        el.addEventListener("click", () => {
-          input.value = suggestions[index].value;
-          closeAutocomplete(results);
-        });
-      });
-
-    }, 250);
-  });
-
-  input.addEventListener("blur", () => {
-    setTimeout(() => closeAutocomplete(results), 150);
-  });
-}
-
-
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp, writeBatch, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+  writeBatch,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = window.FIREBASE_CONFIG || {
   apiKey: "AIzaSyBU6OYKH1GNa6ijTJ_7v87jmoTpHkDQoaQ",
@@ -102,39 +19,80 @@ const firebaseConfig = window.FIREBASE_CONFIG || {
   measurementId: "G-FLRMDHE1N0"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+let app;
+let db;
+
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  console.log("Firebase connecté.");
+} catch (error) {
+  console.error("Erreur Firebase init:", error);
+}
+
 const RESERVATIONS_COLLECTION = "reservations";
 
-function $(id){ return document.getElementById(id); }
+function $(id) {
+  return document.getElementById(id);
+}
 
-function val(id){
+function val(id) {
   const el = $(id);
   return el ? String(el.value || "").trim() : "";
 }
 
-function bool(id){
+function setVal(id, value) {
+  const el = $(id);
+  if (el) el.value = value || "";
+}
+
+function checked(id) {
   const el = $(id);
   return !!(el && el.checked);
 }
 
-function splitDateTime(value){
-  if(!value) return { date:"", time:"" };
-  const [date, timeRaw=""] = String(value).split("T");
-  return { date, time: timeRaw.slice(0,5) };
+function splitDateTime(value) {
+  if (!value) return { date: "", time: "" };
+  const [date, rawTime = ""] = String(value).split("T");
+  return { date, time: rawTime.slice(0, 5) };
 }
 
-function localInputValue(date){
-  const pad = n => String(n).padStart(2,"0");
-  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+function localInputValue(date) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
-function buildData(){
+function showMessage(message, type = "info") {
+  let box = $("formMessage");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "formMessage";
+    const form = $("reservationForm");
+    form?.prepend(box);
+  }
+  box.className = `form-message ${type}`;
+  box.textContent = message;
+  box.classList.remove("hidden");
+}
+
+function hideMessage() {
+  const box = $("formMessage");
+  if (box) box.classList.add("hidden");
+}
+
+function setLoading(isLoading) {
+  const btn = document.querySelector("#reservationForm button[type='submit']");
+  if (!btn) return;
+  btn.disabled = isLoading;
+  btn.textContent = isLoading ? "Envoi en cours..." : "Envoyer la réservation →";
+}
+
+function buildReservation() {
   const dt = splitDateTime(val("heure"));
   const retourDt = splitDateTime(val("heureRetour"));
-  const allerRetour = bool("allerRetour");
+  const isReturn = checked("allerRetour");
 
-  const reservation = {
+  const base = {
     clientName: val("nom"),
     name: val("nom"),
     phone: val("telephone"),
@@ -150,59 +108,105 @@ function buildData(){
     vehicleType: val("vehicule") || "berline",
     luggage: Number(val("valises") || 0),
     notes: val("notes"),
+    tripType: isReturn ? "Aller-retour" : "Aller simple",
+    allerRetour: isReturn,
     status: "pending",
     source: "site-web",
-    createdAt: serverTimestamp(),
-    tripType: allerRetour ? "Aller-retour" : "Aller simple",
-    allerRetour
+    createdAt: serverTimestamp()
   };
 
-  const retourDepart = val("retourDepart") || reservation.destination;
-  const retourArrivee = val("retourArrivee") || reservation.pickup;
-  const retourNumeroVol = val("retourNumeroVol");
-  const retourNotes = val("notesRetour");
+  const retour = {
+    pickup: val("retourDepart") || base.dropoff,
+    dropoff: val("retourArrivee") || base.pickup,
+    datetime: val("heureRetour"),
+    date: retourDt.date,
+    time: retourDt.time,
+    flightNumber: val("retourNumeroVol"),
+    notes: val("notesRetour")
+  };
 
   const emailParams = {
-    // Variables pour ton template ADMIN actuel
-    name: reservation.name,
-    phone: reservation.phone,
-    email: reservation.email,
-    pickup: reservation.pickup,
-    destination: reservation.destination,
-    date: reservation.date,
-    time: reservation.time,
-    passengers: String(reservation.passengers),
-    trip_type: reservation.tripType,
-    message: reservation.notes || "",
+    name: base.name,
+    phone: base.phone,
+    email: base.email,
+    client_name: base.name,
+    client_phone: base.phone,
+    client_email: base.email,
 
-    // Variables compatibles avec l'autre version du template
-    client_name: reservation.name,
-    client_phone: reservation.phone,
-    client_email: reservation.email,
+    pickup: base.pickup,
+    destination: base.destination,
+    date: base.date,
+    time: base.time,
+    passengers: String(base.passengers),
+    trip_type: base.tripType,
+    message: base.notes || "",
 
-    vehicle: reservation.vehicleType,
-    luggage: String(reservation.luggage),
-    flight_number: reservation.flightNumber || "",
-    return_date: retourDt.date,
-    return_time: retourDt.time,
-    return_pickup: retourDepart,
-    return_destination: retourArrivee,
-    return_flight_number: retourNumeroVol,
-    return_notes: retourNotes,
+    vehicle: base.vehicleType,
+    luggage: String(base.luggage),
+    flight_number: base.flightNumber || "",
 
-    // Variables françaises au cas où tu les utilises dans EmailJS
-    retour_depart: retourDepart,
-    retour_arrivee: retourArrivee,
-    retour_numero_vol: retourNumeroVol,
-    retour_notes: retourNotes
+    return_pickup: retour.pickup,
+    return_destination: retour.dropoff,
+    return_date: retour.date,
+    return_time: retour.time,
+    return_flight_number: retour.flightNumber || "",
+    return_notes: retour.notes || "",
+
+    retour_depart: retour.pickup,
+    retour_arrivee: retour.dropoff,
+    retour_numero_vol: retour.flightNumber || "",
+    retour_notes: retour.notes || ""
   };
 
-  return { reservation, emailParams };
+  return { base, retour, emailParams };
 }
 
-async function sendEmails(emailParams){
-  if(!window.emailjs) {
-    console.warn("EmailJS non chargé.");
+async function saveToFirebase(base, retour) {
+  if (!db) {
+    throw new Error("Firebase n’est pas initialisé.");
+  }
+
+  if (base.allerRetour) {
+    const batch = writeBatch(db);
+    const allerRef = doc(collection(db, RESERVATIONS_COLLECTION));
+    const retourRef = doc(collection(db, RESERVATIONS_COLLECTION));
+    const groupId = `rt_${Date.now()}`;
+
+    batch.set(allerRef, {
+      ...base,
+      direction: "aller",
+      groupId,
+      linkedTripId: retourRef.id
+    });
+
+    batch.set(retourRef, {
+      ...base,
+      pickup: retour.pickup,
+      dropoff: retour.dropoff,
+      destination: retour.dropoff,
+      datetime: retour.datetime || base.datetime,
+      date: retour.date || base.date,
+      time: retour.time || base.time,
+      flightNumber: retour.flightNumber || "",
+      notes: retour.notes || "",
+      direction: "retour",
+      groupId,
+      linkedTripId: allerRef.id
+    });
+
+    await batch.commit();
+    return;
+  }
+
+  await addDoc(collection(db, RESERVATIONS_COLLECTION), {
+    ...base,
+    direction: "aller-simple"
+  });
+}
+
+async function sendEmails(emailParams) {
+  if (!window.emailjs) {
+    console.warn("EmailJS SDK non chargé.");
     return;
   }
 
@@ -211,188 +215,202 @@ async function sendEmails(emailParams){
   const adminTemplate = window.EMAILJS_ADMIN_TEMPLATE_ID || window.EMAILJS_TEMPLATE_ID || "template_430p3gg";
   const clientTemplate = window.EMAILJS_CLIENT_TEMPLATE_ID || "template_tt0etny";
 
-  try { window.emailjs.init(publicKey); } catch(e) {}
+  try {
+    window.emailjs.init(publicKey);
+  } catch (e) {}
 
   await window.emailjs.send(serviceId, adminTemplate, emailParams);
 
-  if(emailParams.email){
+  if (emailParams.email) {
     await window.emailjs.send(serviceId, clientTemplate, emailParams);
   }
 }
 
-function showMessage(text, type="info"){
-  let box = $("formMessage");
-  if(!box){
-    box = document.createElement("div");
-    box.id = "formMessage";
-    box.className = "form-message";
-    const form = $("reservationForm");
-    form?.prepend(box);
-  }
-  box.textContent = text;
-  box.className = "form-message " + type; box.classList.remove("hidden");
-}
-
-function setLoading(isLoading){
-  const btn = document.querySelector("#reservationForm button[type='submit']");
-  if(!btn) return;
-  btn.disabled = isLoading;
-  btn.textContent = isLoading ? "Envoi en cours..." : "Envoyer la réservation";
-}
-
-async function handleSubmit(e){
-  e.preventDefault();
+async function handleSubmit(event) {
+  event.preventDefault();
+  hideMessage();
 
   const form = $("reservationForm");
-  if(!form.reportValidity()) return;
+  if (!form) return;
+
+  if (!form.reportValidity()) {
+    return;
+  }
 
   setLoading(true);
   showMessage("Envoi de la réservation...", "info");
 
-  const { reservation, emailParams } = buildData();
+  try {
+    const { base, retour, emailParams } = buildReservation();
 
-  try{
-    if(reservation.allerRetour){
-      const batch = writeBatch(db);
-      const allerRef = doc(collection(db, RESERVATIONS_COLLECTION));
-      const retourRef = doc(collection(db, RESERVATIONS_COLLECTION));
+    await saveToFirebase(base, retour);
 
-      batch.set(allerRef, {
-        ...reservation,
-        direction: "aller",
-        groupId: `rt_${Date.now()}`,
-        linkedTripId: retourRef.id
-      });
-
-      batch.set(retourRef, {
-        ...reservation,
-        pickup: val("retourDepart") || reservation.destination,
-        dropoff: val("retourArrivee") || reservation.pickup,
-        destination: val("retourArrivee") || reservation.pickup,
-        datetime: val("heureRetour") || reservation.datetime,
-        flightNumber: val("retourNumeroVol") || "",
-        notes: val("notesRetour") || "",
-        direction: "retour",
-        linkedTripId: allerRef.id
-      });
-
-      await batch.commit();
-    } else {
-      await addDoc(collection(db, RESERVATIONS_COLLECTION), {
-        ...reservation,
-        direction: "aller-simple"
-      });
-    }
-
-    try{
+    try {
       await sendEmails(emailParams);
-    }catch(emailError){
-      console.error("Erreur EmailJS:", emailError);
-      // La réservation reste enregistrée même si l'email échoue.
+    } catch (emailError) {
+      console.error("EmailJS error:", emailError);
+      showMessage("Réservation enregistrée. Attention: l’email n’a pas été envoyé.", "info");
     }
 
-    showMessage("Réservation envoyée avec succès.", "success");
     form.reset();
+    showMessage("Réservation envoyée avec succès.", "success");
 
     setTimeout(() => {
       window.location.href = "merci.html";
-    }, 900);
+    }, 1000);
 
-  }catch(error){
+  } catch (error) {
     console.error("Erreur réservation:", error);
-    showMessage("Erreur : la réservation n’a pas été envoyée. Vérifiez Firebase Rules ou la connexion.", "error");
-  }finally{
+    showMessage("Erreur réservation: " + (error.message || "Vérifiez les règles Firebase."), "error");
+  } finally {
     setLoading(false);
   }
 }
 
-function setupUI(){
+/* Adresse autocomplete gratuit */
+const AUTOCOMPLETE_CACHE = new Map();
 
-  // Autocomplete adresses
+async function fetchAddressSuggestions(query) {
+  const q = String(query || "").trim();
+  if (q.length < 3) return [];
+
+  if (AUTOCOMPLETE_CACHE.has(q)) return AUTOCOMPLETE_CACHE.get(q);
+
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&addressdetails=1&q=${encodeURIComponent(q + ", Québec, Canada")}`;
+    const response = await fetch(url, { headers: { Accept: "application/json" } });
+    const data = await response.json();
+
+    const results = (data || []).map((item) => ({
+      label: item.display_name,
+      value: item.display_name
+    }));
+
+    AUTOCOMPLETE_CACHE.set(q, results);
+    return results;
+  } catch (error) {
+    console.error("Autocomplete:", error);
+    return [];
+  }
+}
+
+function closeAutocomplete(container) {
+  if (!container) return;
+  container.innerHTML = "";
+  container.style.display = "none";
+}
+
+function setupAutocomplete(inputId, resultsId) {
+  const input = $(inputId);
+  const results = $(resultsId);
+  if (!input || !results) return;
+
+  let timer;
+
+  input.addEventListener("input", () => {
+    clearTimeout(timer);
+
+    const query = input.value.trim();
+    if (query.length < 3) {
+      closeAutocomplete(results);
+      return;
+    }
+
+    timer = setTimeout(async () => {
+      const suggestions = await fetchAddressSuggestions(query);
+
+      if (!suggestions.length) {
+        closeAutocomplete(results);
+        return;
+      }
+
+      results.innerHTML = suggestions.map((item) => `<div class="autocomplete-item">${item.label}</div>`).join("");
+      results.style.display = "block";
+
+      results.querySelectorAll(".autocomplete-item").forEach((el, index) => {
+        el.addEventListener("click", () => {
+          input.value = suggestions[index].value;
+          closeAutocomplete(results);
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+      });
+    }, 250);
+  });
+
+  input.addEventListener("blur", () => {
+    setTimeout(() => closeAutocomplete(results), 180);
+  });
+}
+
+function syncReturnUI() {
+  const tripType = $("tripTypeSelect");
+  const allerRetour = $("allerRetour");
+  const retourFields = $("retourFields");
+  const isReturn = tripType?.value === "retour" || !!allerRetour?.checked;
+
+  if (allerRetour) allerRetour.checked = isReturn;
+  retourFields?.classList.toggle("hidden", !isReturn);
+
+  ["retourDepart", "retourArrivee", "heureRetour"].forEach((id) => {
+    const el = $(id);
+    if (el) el.required = isReturn;
+  });
+
+  if (isReturn) {
+    if (!val("retourDepart")) setVal("retourDepart", val("arrivee"));
+    if (!val("retourArrivee")) setVal("retourArrivee", val("depart"));
+  }
+}
+
+function setupUI() {
   setupAutocomplete("depart", "depart-results");
   setupAutocomplete("arrivee", "arrivee-results");
   setupAutocomplete("retourDepart", "retour-depart-results");
   setupAutocomplete("retourArrivee", "retour-arrivee-results");
 
   const form = $("reservationForm");
-  if(form) form.addEventListener("submit", handleSubmit);
+  if (form) form.addEventListener("submit", handleSubmit);
 
-  const tripTypeSelect = $("tripTypeSelect");
-  const retour = $("allerRetour");
-  const retourFields = $("retourFields");
+  $("tripTypeSelect")?.addEventListener("change", syncReturnUI);
 
-  tripTypeSelect?.addEventListener("change", () => {
-    if(retour){
-      retour.checked = tripTypeSelect.value === "retour";
-      retour.dispatchEvent(new Event("change", { bubbles:true }));
-    }
-  });
-
-  document.querySelectorAll(".choose-car").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const vehicule = $("vehicule");
-      if(vehicule) vehicule.value = btn.dataset.car || "berline";
-      document.querySelector("#reservationForm")?.scrollIntoView({behavior:"smooth", block:"start"});
-    });
-  });
-
-  function syncRetourFields(){
-    if(!retour || !retourFields) return;
-    const active = retour.checked;
-    retourFields.classList.toggle("hidden", !active);
-
-    ["retourDepart", "retourArrivee", "heureRetour"].forEach(id => {
-      const el = $(id);
-      if(el) el.required = active;
-    });
-
-    if(active){
-      const retourDepart = $("retourDepart");
-      const retourArrivee = $("retourArrivee");
-      if(retourDepart && !retourDepart.value) retourDepart.value = val("arrivee");
-      if(retourArrivee && !retourArrivee.value) retourArrivee.value = val("depart");
-    }
-  }
-
-  retour?.addEventListener("change", syncRetourFields);
   $("depart")?.addEventListener("input", () => {
-    if(retour?.checked && $("retourArrivee") && !$("retourArrivee").dataset.edited){
-      $("retourArrivee").value = val("depart");
+    if ($("tripTypeSelect")?.value === "retour" && !$("retourArrivee")?.dataset.edited) {
+      setVal("retourArrivee", val("depart"));
     }
   });
+
   $("arrivee")?.addEventListener("input", () => {
-    if(retour?.checked && $("retourDepart") && !$("retourDepart").dataset.edited){
-      $("retourDepart").value = val("arrivee");
+    if ($("tripTypeSelect")?.value === "retour" && !$("retourDepart")?.dataset.edited) {
+      setVal("retourDepart", val("arrivee"));
     }
   });
+
   $("retourDepart")?.addEventListener("input", () => $("retourDepart").dataset.edited = "1");
   $("retourArrivee")?.addEventListener("input", () => $("retourArrivee").dataset.edited = "1");
-  syncRetourFields();
 
-  document.querySelectorAll(".quick-destination-btn").forEach(btn => {
+  document.querySelectorAll(".quick-destination-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const target = $(btn.dataset.target || "arrivee");
-      if(target) target.value = btn.dataset.address || "";
-    });
-  });
-
-  document.querySelectorAll(".datetime-chip").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const target = $(btn.dataset.target || "heure");
-      if(!target) return;
-
-      if(btn.dataset.mode === "now"){
-        const d = new Date(Date.now() + 15 * 60000);
-        target.value = localInputValue(d);
-      } else {
-        target.focus();
-        target.showPicker?.();
+      if (target) {
+        target.value = btn.dataset.address || "";
+        target.dispatchEvent(new Event("input", { bubbles: true }));
       }
     });
   });
 
-  const now = new Date(Date.now() + 10 * 60000);
-  if($("heure")) $("heure").min = localInputValue(now);
+  document.querySelectorAll(".choose-car").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const vehicule = $("vehicule");
+      if (vehicule) vehicule.value = btn.dataset.car || "berline";
+      $("reservationForm")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  const minDate = new Date(Date.now() + 10 * 60000);
+  if ($("heure")) $("heure").min = localInputValue(minDate);
+  if ($("heureRetour")) $("heureRetour").min = localInputValue(minDate);
+
+  syncReturnUI();
 }
 
 document.addEventListener("DOMContentLoaded", setupUI);
