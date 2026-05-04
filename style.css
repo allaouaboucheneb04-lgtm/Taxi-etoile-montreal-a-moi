@@ -491,3 +491,28 @@ input:focus,select:focus,textarea:focus{
     padding:16px;
   }
 }
+
+/* VEHICLE PHOTOS FINAL */
+.vehicle-card img,
+.vehicle-card .vehicle-real{
+  width:100% !important;
+  height:auto !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  background:#050505 !important;
+  border-radius:22px !important;
+  padding:0 !important;
+  display:block !important;
+}
+
+.vehicle-card{
+  overflow:hidden !important;
+}
+
+@media(max-width:900px){
+  .vehicle-card img,
+  .vehicle-card .vehicle-real{
+    height:auto !important;
+  }
+}
