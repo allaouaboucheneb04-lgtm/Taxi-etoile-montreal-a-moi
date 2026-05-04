@@ -284,3 +284,27 @@ footer strong{color:var(--black)}
   .grid-2{grid-template-columns:1fr}
   footer{flex-direction:column;text-align:center}
 }
+
+.form-message{
+  padding:13px 14px;
+  border-radius:16px;
+  font-weight:800;
+  margin-bottom:10px;
+  border:1px solid var(--line);
+  background:#fff8df;
+  color:#5f4300;
+}
+.form-message.success{
+  background:#ecfdf5;
+  color:#065f46;
+  border-color:#bbf7d0;
+}
+.form-message.error{
+  background:#fef2f2;
+  color:#991b1b;
+  border-color:#fecaca;
+}
+button:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
