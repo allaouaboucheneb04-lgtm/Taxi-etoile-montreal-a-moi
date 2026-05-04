@@ -1,7 +1,8 @@
-window.EMAILJS_PUBLIC_KEY = 'W-3rUaqJdvEjPE1J0';
-window.EMAILJS_SERVICE_ID = 'service_5phpu0d';
-window.EMAILJS_TEMPLATE_ID = 'template_06gymkw';
-window.EMAILJS_ADMIN_TEMPLATE_ID = 'template_06gymkw';
-window.EMAILJS_CLIENT_TEMPLATE_ID = 'template_57gauxj';
-window.TAXI_APP_INSTALL_URL = 'https://taxilivesoreltracy.com/';
-window.TAXI_GOOGLE_REVIEW_URL = 'https://www.google.com/search?q=Taxi+Live+Montreal+avis';
+window.EMAILJS_yboy22jWUXe2Qfpak = 'yboy22jWUXe2Qfpak';
+window.EMAILJS_service_mq6perp = 'service_mq6perp';
+window.EMAILJS_TEMPLATE_ID = 'template_430p3gg';
+window.EMAILJS_ADMIN_TEMPLATE_ID = 'template_430p3gg';
+// Crée un 2e template EmailJS pour la confirmation client, puis colle son ID ici.
+window.EMAILJS_CLIENT_TEMPLATE_ID = '';
+window.TAXI_APP_INSTALL_URL = 'https://www.taxietoilemontreal.com/';
+window.TAXI_GOOGLE_REVIEW_URL = 'https://www.google.com/search?q=Taxi+Etoile+Montreal+avis';

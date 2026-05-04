@@ -1,0 +1,22 @@
+Configuration EmailJS intégrée
+
+Public Key: yboy22jWUXe2Qfpak
+Service ID: service_mq6perp
+Template Admin: template_430p3gg
+Template Client confirmation: template_tt0etny
+
+Le fichier mail.js envoie automatiquement:
+1. Un email admin vers etoiletaximontreal@gmail.com
+2. Un email de confirmation au client via {client_email}
+
+Variables utilisées:
+client_name
+client_phone
+client_email
+pickup
+destination
+date
+time
+passengers
+trip_type
+message

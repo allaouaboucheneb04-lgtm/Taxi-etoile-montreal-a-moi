@@ -38,6 +38,7 @@ h1,h2,h3{
 color:#facc15!important;
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body class="admin-pro-app">
 <header class="hero admin-hero">
@@ -102,7 +103,7 @@ color:#facc15!important;
 <label class="settings-field"><span>Nom du service</span><input id="siteServiceName" placeholder="Taxi Etoile" type="text"/></label>
 <label class="settings-field"><span>Téléphone cliquable</span><input id="sitePhone" placeholder="" type="text"/></label>
 <label class="settings-field"><span>Téléphone affiché</span><input id="siteDisplayPhone" placeholder="" type="text"/></label>
-<label class="settings-field"><span>Email de contact</span><input id="siteSupportEmail" placeholder="taxilivesoreltracy@gmail.com" type="email"/></label>
+<label class="settings-field"><span>Email de contact</span><input id="siteSupportEmail" placeholder="etoiletaximontreal@gmail.com" type="email"/></label>
 <label class="settings-field full"><span>Message d'accueil</span><input id="siteHeroTagline" placeholder="Votre taxi local à Montreal, Montréal et aéroport 24/7" type="text"/></label>
 <label class="settings-field"><span>Texte bouton réserver</span><input id="siteReserveButtonLabel" placeholder="Réserver" type="text"/></label>
 <label class="settings-field"><span>Texte bouton appeler</span><input id="siteCallButtonLabel" placeholder="Appeler" type="text"/></label>
@@ -139,5 +140,7 @@ color:#facc15!important;
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="firebase-config.js"></script>
 <script src="main.js"></script>
+  <script src="mail.js"></script>
+<script type="module" src="firebase.js"></script>
 </body>
 </html>

@@ -35,6 +35,7 @@ h1,h2,h3{
 color:#facc15!important;
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <header class="hero">
@@ -85,5 +86,7 @@ if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js',{sco
 </script>
 <script src="hamburger-menu.js"></script>
 <div class="mobile-sticky-actions"><a class="reserve" data-site-reserve-label="" href="index.html#reservationForm">Réserver</a><a class="call site-call-link" data-site-call-link="" href="tel:">Appeler</a></div>
+  <script src="mail.js"></script>
+<script type="module" src="firebase.js"></script>
 </body>
 </html>

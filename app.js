@@ -1,7 +1,7 @@
-const SERVICE_ID = 'service_5phpu0d';
-const TEMPLATE_ID = 'template_06gymkw';
-const PUBLIC_KEY = 'W-3rUaqJdvEjPE1J0';
+const service_mq6perp = 'service_mq6perp';
+const TEMPLATE_ID = 'template_430p3gg';
+const yboy22jWUXe2Qfpak = 'yboy22jWUXe2Qfpak';
 
 if (window.emailjs) {
-  window.emailjs.init(PUBLIC_KEY);
+  window.emailjs.init(yboy22jWUXe2Qfpak);
 }
