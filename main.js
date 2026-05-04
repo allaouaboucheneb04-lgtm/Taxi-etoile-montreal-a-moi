@@ -66,7 +66,7 @@ function buildReservationEmailParams(baseReservation, extras = {}) {
   const siteUrl = resolveBaseSiteUrl();
   const appUrl = TAXI_APP_INSTALL_URL || siteUrl;
   const reviewUrl = TAXI_GOOGLE_REVIEW_URL || 'https://www.google.com/search?q=Taxi+Live+Montréal+avis';
-  const serviceName = siteSettings?.serviceName || DEFAULT_SITE_SETTINGS.serviceName || 'Taxi Etoile Montréal';
+  const serviceName = siteSettings?.serviceName || DEFAULT_SITE_SETTINGS.serviceName || 'Taxi Étoile Montréal';
   const displayPhone = siteSettings?.displayPhone || DEFAULT_SITE_SETTINGS.displayPhone || '';
   const supportEmail = siteSettings?.supportEmail || DEFAULT_SITE_SETTINGS.supportEmail || '';
   const tripTypeLabel = extras.allerRetour ? 'Aller-retour' : 'Aller simple';
@@ -143,10 +143,10 @@ function buildReservationEmailParams(baseReservation, extras = {}) {
     business_email: supportEmail,
     business_site: siteUrl,
     app_install_title: 'Ajoutez notre application sur votre téléphone',
-    app_install_text: `Ouvrez ${appUrl || 'notre site'}, puis choisissez « Ajouter à l’écran d’accueil » pour utiliser Taxi Etoile comme une application.`,
+    app_install_text: `Ouvrez ${appUrl || 'notre site'}, puis choisissez « Ajouter à l’écran d’accueil » pour utiliser Taxi Étoile comme une application.`,
     app_url: appUrl,
     review_title: 'Votre avis Google nous aide beaucoup',
-    review_text: 'Après votre course, laissez-nous un avis sur Google en recherchant Taxi Etoile Montréal. Merci pour votre confiance.',
+    review_text: 'Après votre course, laissez-nous un avis sur Google en recherchant Taxi Étoile Montréal. Merci pour votre confiance.',
     review_url: reviewUrl,
     confirmation_footer: `Besoin d’aide ? Appelez-nous au ${displayPhone}.`
   };
@@ -197,7 +197,7 @@ const DRIVERS_COLLECTION = 'drivers';
 const SITE_SETTINGS_COLLECTION = 'settings';
 const SITE_SETTINGS_DOC = 'site';
 const DEFAULT_SITE_SETTINGS = {
-  serviceName: 'Taxi Etoile Montréal',
+  serviceName: 'Taxi Étoile Montréal',
   phone: '',
   displayPhone: '',
   showCallButton: true,
@@ -331,7 +331,7 @@ function reservationMapUrl(item) {
 function reservationWhatsAppUrl(item) {
   const phone = cleanPhoneNumber(reservationPhone(item));
   if (!phone) return '';
-  const text = `Bonjour ${reservationName(item) || ''}, Taxi Etoile Montréal pour votre course du ${formatDateTime(reservationDateTime(item))}. Départ: ${reservationPickup(item) || '—'} | Arrivée: ${reservationDropoff(item) || '—'}.`;
+  const text = `Bonjour ${reservationName(item) || ''}, Taxi Étoile Montréal pour votre course du ${formatDateTime(reservationDateTime(item))}. Départ: ${reservationPickup(item) || '—'} | Arrivée: ${reservationDropoff(item) || '—'}.`;
   return `https://wa.me/${encodeURIComponent(phone)}?text=${encodeURIComponent(text)}`;
 }
 
@@ -661,7 +661,7 @@ function rankSuggestionsByPriority(query, items) {
   const q = (query || '').toLowerCase().trim();
   const nearby = [
     ['sorel', 18],
-    ['sorel-tracy', 20],
+    ['Montréal', 20],
     ['tracy', 12],
     ['saint-joseph-de-sorel', 12],
     ['saint-joseph', 8],
@@ -681,7 +681,7 @@ function rankSuggestionsByPriority(query, items) {
 
   const queryBoosts = [
     { test: /aer|aéro|aero|yul|trud|dorv/, matches: ['aéroport', 'aeroport', 'trudeau', 'yul', 'dorval'], boost: 30 },
-    { test: /sor|tra/, matches: ['sorel', 'sorel-tracy', 'tracy'], boost: 24 },
+    { test: /sor|tra/, matches: ['sorel', 'Montréal', 'tracy'], boost: 24 },
     { test: /gar|centr/, matches: ['gare centrale'], boost: 26 },
     { test: /mon|cent/, matches: ['montreal', 'montréal', 'centre-ville de montréal'], boost: 16 }
   ];
@@ -1478,7 +1478,7 @@ function exportReservationsCsv() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'dispatch-taxi-live-sorel-tracy.csv';
+  a.download = 'dispatch-taxi-live-Montréal.csv';
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -1509,7 +1509,7 @@ function printDispatchPlanning() {
       th,td{border:1px solid #ddd;padding:8px;font-size:12px;text-align:left;vertical-align:top}
       th{background:#f4f4f4}
     </style></head><body>
-      <h1>Planning Dispatch - Taxi Etoile Montréal</h1>
+      <h1>Planning Dispatch - Taxi Étoile Montréal</h1>
       <p>Généré le ${escapeHtml(formatDateTime(new Date()))}</p>
       <table>
         <thead><tr><th>Date/heure</th><th>Client</th><th>Téléphone</th><th>Départ</th><th>Arrivée</th><th>Direction</th><th>Statut</th><th>Chauffeur</th></tr></thead>
@@ -1900,7 +1900,7 @@ function renderReservations() {
       const id = button.getAttribute('data-copy-dispatch-id');
       const item = filtered.find((entry) => entry.id === id);
       if (!item) return;
-      const text = `Taxi Etoile Dispatch
+      const text = `Taxi Étoile Dispatch
 Client: ${reservationName(item) || '—'}
 Téléphone: ${reservationPhone(item) || '—'}
 Date: ${formatDateTime(reservationDateTime(item))}
@@ -2189,7 +2189,7 @@ function renderDriverReservations() {
       const id = button.getAttribute('data-copy-id');
       const item = filtered.find((entry) => entry.id === id);
       if (!item) return;
-      const text = `Taxi Etoile
+      const text = `Taxi Étoile
 Client: ${reservationName(item) || '—'}
 Téléphone: ${reservationPhone(item) || '—'}
 Date: ${formatDateTime(reservationDateTime(item))}

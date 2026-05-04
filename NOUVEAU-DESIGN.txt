@@ -1,0 +1,7 @@
+Nouveau design appliqué:
+- identité Taxi Étoile Montréal
+- design bleu nuit / or, différent de Taxi Live Sorel-Tracy
+- nouveau logo et nouvelles icônes PWA
+- numéro de téléphone supprimé de l’interface
+- logique de réservation conservée
+- EmailJS et Firebase conservés

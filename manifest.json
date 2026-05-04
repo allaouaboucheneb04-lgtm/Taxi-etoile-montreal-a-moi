@@ -1,12 +1,12 @@
 {
-  "name": "Taxi Etoile",
-  "short_name": "Taxi Etoile",
+  "name": "Taxi Étoile Montréal",
+  "short_name": "Taxi Étoile",
   "description": "Taxi à Montreal, Montréal et aéroport. Réservation rapide 24/7.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#FFCA28",
-  "theme_color": "#FFCA28",
+  "background_color": "#081228",
+  "theme_color": "#081228",
   "orientation": "portrait",
   "lang": "fr-CA",
   "icons": [

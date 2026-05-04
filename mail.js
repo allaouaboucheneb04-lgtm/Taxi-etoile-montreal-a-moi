@@ -1,4 +1,4 @@
-// Taxi Etoile Montreal - EmailJS configuration
+// Taxi Étoile Montreal - EmailJS configuration
 // Sends 2 emails:
 // 1) Admin notification to etoiletaximontreal@gmail.com
 // 2) Client confirmation to the email entered in the form
