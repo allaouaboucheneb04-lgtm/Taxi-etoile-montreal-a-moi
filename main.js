@@ -347,7 +347,10 @@ function syncReturnUI() {
   const retourFields = $("retourFields");
   const isReturn = !!allerRetour?.checked;
 
-  retourFields?.classList.toggle("hidden", !isReturn);
+  if (retourFields) {
+    retourFields.classList.toggle("hidden", !isReturn);
+    retourFields.style.display = isReturn ? "grid" : "none";
+  }
 
   ["retourDepart", "retourArrivee", "heureRetour"].forEach((id) => {
     const el = $(id);

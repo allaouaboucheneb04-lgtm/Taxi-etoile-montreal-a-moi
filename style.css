@@ -454,3 +454,40 @@ input:focus,select:focus,textarea:focus{
     align-items:flex-start;
   }
 }
+
+/* RETOUR DETAILS FIX */
+.retour-toggle{
+  cursor:pointer;
+  user-select:none;
+}
+
+.retour-toggle input{
+  appearance:auto !important;
+  -webkit-appearance:auto !important;
+}
+
+.retour-box{
+  display:grid;
+  gap:16px;
+  margin-top:4px;
+  background:#fffaf0;
+  border:1px solid #eee2b8;
+  border-radius:22px;
+  padding:18px;
+}
+
+.retour-box.hidden{
+  display:none !important;
+}
+
+.retour-box h3{
+  margin:0 0 4px;
+  font-size:24px;
+  color:#111;
+}
+
+@media(max-width:900px){
+  .retour-box{
+    padding:16px;
+  }
+}
