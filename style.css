@@ -628,3 +628,13 @@ input:focus,select:focus,textarea:focus{
     font-size:12px;
   }
 }
+
+/* BANNIÈRE 5 SECONDES + 6 PHOTOS */
+.carousel-dots{
+  background:rgba(0,0,0,.35);
+  padding:7px;
+  border-radius:999px;
+}
+.carousel-dots button{
+  cursor:pointer;
+}
