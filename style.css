@@ -403,3 +403,26 @@ input:focus,select:focus,textarea:focus{
 .footer{
   border-top:1px solid rgba(255,193,7,.2);
 }
+
+
+.vehicle-card{
+  overflow:hidden;
+}
+
+.vehicle-card .vehicle-real{
+  width:100%;
+  height:270px !important;
+  object-fit:cover !important;
+  object-position:left center !important;
+  border-radius:22px;
+}
+
+.vehicle-card .vehicle-real.kona{
+  object-position:right center !important;
+}
+
+@media(max-width:900px){
+  .vehicle-card .vehicle-real{
+    height:220px !important;
+  }
+}
