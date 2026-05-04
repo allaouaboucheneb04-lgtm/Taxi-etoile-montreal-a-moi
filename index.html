@@ -135,14 +135,39 @@
         </label>
 
         <div class="retour-box hidden" id="retourFields">
-          <h3>Retour</h3>
+          <h3>Informations du retour</h3>
+
           <label class="field">
-            <span>Date et heure du retour</span>
-            <input id="heureRetour" name="heure_retour" type="datetime-local">
+            <span>Adresse de départ du retour</span>
+            <div class="autocomplete-wrap">
+              <input autocomplete="off" id="retourDepart" name="retour_depart" placeholder="Ex: Aéroport YUL" type="text">
+              <div class="autocomplete" id="retour-depart-results"></div>
+            </div>
           </label>
+
+          <label class="field">
+            <span>Adresse d’arrivée du retour</span>
+            <div class="autocomplete-wrap">
+              <input autocomplete="off" id="retourArrivee" name="retour_arrivee" placeholder="Ex: Montréal, QC" type="text">
+              <div class="autocomplete" id="retour-arrivee-results"></div>
+            </div>
+          </label>
+
+          <div class="grid-2">
+            <label class="field">
+              <span>Date et heure du retour</span>
+              <input id="heureRetour" name="heure_retour" type="datetime-local">
+            </label>
+
+            <label class="field">
+              <span>Numéro de vol retour</span>
+              <input id="retourNumeroVol" name="retour_numero_vol" placeholder="Optionnel" type="text">
+            </label>
+          </div>
+
           <label class="field">
             <span>Notes retour</span>
-            <textarea id="notesRetour" name="notes_retour" rows="2" placeholder="Optionnel"></textarea>
+            <textarea id="notesRetour" name="notes_retour" rows="2" placeholder="Instructions pour le retour, terminal, porte, bagages..."></textarea>
           </label>
         </div>
 

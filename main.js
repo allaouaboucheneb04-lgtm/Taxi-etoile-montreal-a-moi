@@ -1,4 +1,94 @@
 
+const AUTOCOMPLETE_CACHE = new Map();
+
+async function fetchAddressSuggestions(query){
+  const q = String(query || "").trim();
+  if(q.length < 3) return [];
+
+  if(AUTOCOMPLETE_CACHE.has(q)){
+    return AUTOCOMPLETE_CACHE.get(q);
+  }
+
+  try{
+    const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&addressdetails=1&q=${encodeURIComponent(q + ", Québec, Canada")}`;
+    const response = await fetch(url, {
+      headers: {
+        "Accept": "application/json"
+      }
+    });
+
+    const data = await response.json();
+
+    const results = (data || []).map(item => ({
+      label: item.display_name,
+      value: item.display_name
+    }));
+
+    AUTOCOMPLETE_CACHE.set(q, results);
+    return results;
+
+  }catch(error){
+    console.error("Autocomplete error:", error);
+    return [];
+  }
+}
+
+function closeAutocomplete(container){
+  if(container){
+    container.innerHTML = "";
+    container.style.display = "none";
+  }
+}
+
+function setupAutocomplete(inputId, resultsId){
+  const input = $(inputId);
+  const results = $(resultsId);
+
+  if(!input || !results) return;
+
+  let debounce;
+
+  input.addEventListener("input", () => {
+    clearTimeout(debounce);
+
+    const query = input.value.trim();
+
+    if(query.length < 3){
+      closeAutocomplete(results);
+      return;
+    }
+
+    debounce = setTimeout(async () => {
+      const suggestions = await fetchAddressSuggestions(query);
+
+      if(!suggestions.length){
+        closeAutocomplete(results);
+        return;
+      }
+
+      results.innerHTML = suggestions.map(item => `
+        <div class="autocomplete-item">${item.label}</div>
+      `).join("");
+
+      results.style.display = "block";
+
+      results.querySelectorAll(".autocomplete-item").forEach((el, index) => {
+        el.addEventListener("click", () => {
+          input.value = suggestions[index].value;
+          closeAutocomplete(results);
+        });
+      });
+
+    }, 250);
+  });
+
+  input.addEventListener("blur", () => {
+    setTimeout(() => closeAutocomplete(results), 150);
+  });
+}
+
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp, writeBatch, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -67,6 +157,11 @@ function buildData(){
     allerRetour
   };
 
+  const retourDepart = val("retourDepart") || reservation.destination;
+  const retourArrivee = val("retourArrivee") || reservation.pickup;
+  const retourNumeroVol = val("retourNumeroVol");
+  const retourNotes = val("notesRetour");
+
   const emailParams = {
     // Variables pour ton template ADMIN actuel
     name: reservation.name,
@@ -90,7 +185,16 @@ function buildData(){
     flight_number: reservation.flightNumber || "",
     return_date: retourDt.date,
     return_time: retourDt.time,
-    return_notes: val("notesRetour")
+    return_pickup: retourDepart,
+    return_destination: retourArrivee,
+    return_flight_number: retourNumeroVol,
+    return_notes: retourNotes,
+
+    // Variables françaises au cas où tu les utilises dans EmailJS
+    retour_depart: retourDepart,
+    retour_arrivee: retourArrivee,
+    retour_numero_vol: retourNumeroVol,
+    retour_notes: retourNotes
   };
 
   return { reservation, emailParams };
@@ -162,10 +266,11 @@ async function handleSubmit(e){
 
       batch.set(retourRef, {
         ...reservation,
-        pickup: reservation.destination,
-        dropoff: reservation.pickup,
-        destination: reservation.pickup,
+        pickup: val("retourDepart") || reservation.destination,
+        dropoff: val("retourArrivee") || reservation.pickup,
+        destination: val("retourArrivee") || reservation.pickup,
         datetime: val("heureRetour") || reservation.datetime,
+        flightNumber: val("retourNumeroVol") || "",
         notes: val("notesRetour") || "",
         direction: "retour",
         linkedTripId: allerRef.id
@@ -202,14 +307,51 @@ async function handleSubmit(e){
 }
 
 function setupUI(){
+
+  // Autocomplete adresses
+  setupAutocomplete("depart", "depart-results");
+  setupAutocomplete("arrivee", "arrivee-results");
+  setupAutocomplete("retourDepart", "retour-depart-results");
+  setupAutocomplete("retourArrivee", "retour-arrivee-results");
+
   const form = $("reservationForm");
   if(form) form.addEventListener("submit", handleSubmit);
 
   const retour = $("allerRetour");
   const retourFields = $("retourFields");
-  retour?.addEventListener("change", () => {
-    retourFields?.classList.toggle("hidden", !retour.checked);
+
+  function syncRetourFields(){
+    if(!retour || !retourFields) return;
+    const active = retour.checked;
+    retourFields.classList.toggle("hidden", !active);
+
+    ["retourDepart", "retourArrivee", "heureRetour"].forEach(id => {
+      const el = $(id);
+      if(el) el.required = active;
+    });
+
+    if(active){
+      const retourDepart = $("retourDepart");
+      const retourArrivee = $("retourArrivee");
+      if(retourDepart && !retourDepart.value) retourDepart.value = val("arrivee");
+      if(retourArrivee && !retourArrivee.value) retourArrivee.value = val("depart");
+    }
+  }
+
+  retour?.addEventListener("change", syncRetourFields);
+  $("depart")?.addEventListener("input", () => {
+    if(retour?.checked && $("retourArrivee") && !$("retourArrivee").dataset.edited){
+      $("retourArrivee").value = val("depart");
+    }
   });
+  $("arrivee")?.addEventListener("input", () => {
+    if(retour?.checked && $("retourDepart") && !$("retourDepart").dataset.edited){
+      $("retourDepart").value = val("arrivee");
+    }
+  });
+  $("retourDepart")?.addEventListener("input", () => $("retourDepart").dataset.edited = "1");
+  $("retourArrivee")?.addEventListener("input", () => $("retourArrivee").dataset.edited = "1");
+  syncRetourFields();
 
   document.querySelectorAll(".quick-destination-btn").forEach(btn => {
     btn.addEventListener("click", () => {

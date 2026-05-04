@@ -308,3 +308,12 @@ button:disabled{
   opacity:.65;
   cursor:not-allowed;
 }
+
+.retours-separator{height:1px;background:var(--line);margin:10px 0}
+.retour-box{
+  background:#fffaf0;
+}
+.retour-box h3::before{
+  content:"↩ ";
+  color:var(--gold);
+}
