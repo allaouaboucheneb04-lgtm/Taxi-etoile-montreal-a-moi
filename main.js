@@ -139,26 +139,27 @@ function buildReservation() {
     time: base.time,
     passengers: String(base.passengers),
     trip_type: base.tripType,
+    is_round_trip: base.allerRetour,
     message: base.notes || "",
 
     vehicle: base.vehicleType,
     luggage: String(base.luggage),
     flight_number: base.flightNumber || "",
 
-    return_pickup: retour.pickup,
-    return_destination: retour.dropoff,
-    return_date: retour.date,
-    return_time: retour.time,
-    return_flight_number: retour.flightNumber || "",
-    return_notes: retour.notes || "",
+    return_pickup: base.allerRetour ? retour.pickup : "",
+    return_destination: base.allerRetour ? retour.dropoff : "",
+    return_date: base.allerRetour ? retour.date : "",
+    return_time: base.allerRetour ? retour.time : "",
+    return_flight_number: base.allerRetour ? (retour.flightNumber || "") : "",
+    return_notes: base.allerRetour ? (retour.notes || "") : "",
 
-    retour_depart: retour.pickup,
-    retour_arrivee: retour.dropoff,
-    retour_date: retour.date,
-    retour_time: retour.time,
-    retour_heure: retour.time || "",
-    retour_numero_vol: retour.flightNumber || "",
-    retour_notes: retour.notes || ""
+    retour_depart: base.allerRetour ? retour.pickup : "",
+    retour_arrivee: base.allerRetour ? retour.dropoff : "",
+    retour_date: base.allerRetour ? retour.date : "",
+    retour_time: base.allerRetour ? retour.time : "",
+    retour_heure: base.allerRetour ? (retour.time || "") : "",
+    retour_numero_vol: base.allerRetour ? (retour.flightNumber || "") : "",
+    retour_notes: base.allerRetour ? (retour.notes || "") : ""
   };
 
   return { base, retour, emailParams };
