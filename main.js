@@ -154,6 +154,9 @@ function buildReservation() {
 
     retour_depart: retour.pickup,
     retour_arrivee: retour.dropoff,
+    retour_date: retour.date,
+    retour_time: retour.time,
+    retour_heure: retour.datetime || "",
     retour_numero_vol: retour.flightNumber || "",
     retour_notes: retour.notes || ""
   };
