@@ -778,3 +778,130 @@ input:focus,select:focus,textarea:focus{
     height:190px !important;
   }
 }
+
+/* BANNIÈRE GRAND FORMAT AVEC DOSSIER images/banner */
+.hero-carousel-card{
+  overflow:visible !important;
+  padding:14px !important;
+  background:#ffffff !important;
+  border-radius:32px !important;
+}
+
+.vehicle-carousel{
+  position:relative !important;
+  width:100% !important;
+  max-width:860px !important;
+  margin:0 auto !important;
+  border-radius:26px !important;
+  overflow:hidden !important;
+  background:#000 !important;
+  padding:0 !important;
+  min-height:0 !important;
+  box-shadow:0 16px 42px rgba(0,0,0,.18) !important;
+}
+
+.vehicle-slide{
+  display:none;
+  position:relative;
+}
+
+.vehicle-slide.active{
+  display:block;
+}
+
+.vehicle-slide img{
+  width:100% !important;
+  height:340px !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  border-radius:26px !important;
+  display:block !important;
+}
+
+.slide-caption{
+  position:absolute !important;
+  bottom:16px !important;
+  left:16px !important;
+  right:16px !important;
+  background:rgba(0,0,0,.70) !important;
+  border:1px solid #ffc107 !important;
+  border-radius:18px !important;
+  padding:14px 16px !important;
+  color:#fff !important;
+  backdrop-filter:blur(7px);
+}
+
+.slide-caption strong{
+  display:block !important;
+  font-size:24px !important;
+  color:#ffc107 !important;
+  margin-bottom:4px !important;
+}
+
+.slide-caption span{
+  font-size:15px !important;
+  color:#fff !important;
+}
+
+.carousel-dots{
+  position:absolute !important;
+  top:14px !important;
+  right:14px !important;
+  display:flex !important;
+  gap:7px !important;
+  z-index:10 !important;
+  background:rgba(0,0,0,.40) !important;
+  padding:7px !important;
+  border-radius:999px !important;
+}
+
+.carousel-dots button{
+  width:10px !important;
+  height:10px !important;
+  min-height:10px !important;
+  border:none !important;
+  border-radius:50% !important;
+  background:rgba(255,255,255,.45) !important;
+  padding:0 !important;
+}
+
+.carousel-dots button.active{
+  background:#ffc107 !important;
+  transform:scale(1.25);
+}
+
+.advance-pill{
+  margin-top:14px !important;
+}
+
+@media(max-width:900px){
+  .hero-carousel-card{
+    margin:0 18px 22px !important;
+    padding:12px !important;
+  }
+
+  .vehicle-slide img{
+    height:280px !important;
+  }
+
+  .slide-caption{
+    left:12px !important;
+    right:12px !important;
+    bottom:12px !important;
+    padding:12px 14px !important;
+  }
+
+  .slide-caption strong{
+    font-size:20px !important;
+  }
+
+  .slide-caption span{
+    font-size:13px !important;
+  }
+}
+
+@media(max-width:430px){
+  .vehicle-slide img{
+    height:255px !important;
+  }
+}
