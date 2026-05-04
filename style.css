@@ -317,3 +317,81 @@ button:disabled{
   content:"↩ ";
   color:var(--gold);
 }
+
+
+/* MOBILE LAYOUT FIX */
+.field{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  margin-bottom:14px !important;
+}
+
+.field span,
+.field label,
+.label-field{
+  display:block !important;
+  position:relative !important;
+  line-height:1.35 !important;
+  margin:0 0 6px 0 !important;
+  padding:0 !important;
+  white-space:normal !important;
+}
+
+input,
+select,
+textarea{
+  position:relative !important;
+  z-index:1 !important;
+  min-height:56px !important;
+}
+
+textarea{
+  min-height:110px !important;
+}
+
+.grid-2{
+  align-items:start !important;
+}
+
+.retour-box{
+  overflow:visible !important;
+}
+
+.datetime-block input[type="datetime-local"]{
+  width:100% !important;
+}
+
+@media(max-width:768px){
+
+  .reservation-card{
+    padding:18px !important;
+  }
+
+  h1{
+    font-size:38px !important;
+    line-height:1.05 !important;
+  }
+
+  .form-head h2{
+    font-size:30px !important;
+  }
+
+  .topbar{
+    gap:10px;
+  }
+
+  .brand img{
+    width:140px !important;
+    height:auto !important;
+  }
+
+  .mini-link{
+    padding:10px 14px !important;
+    font-size:14px !important;
+  }
+
+  .retour-box{
+    padding:16px !important;
+  }
+}
