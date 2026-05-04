@@ -395,3 +395,27 @@ textarea{
     padding:16px !important;
   }
 }
+
+
+/* FIX scroll bouton réserver */
+#reservationForm{
+  scroll-margin-top:120px;
+}
+
+html{
+  scroll-padding-top:120px;
+}
+
+.topbar{
+  height:88px;
+}
+
+@media(max-width:768px){
+  #reservationForm{
+    scroll-margin-top:110px;
+  }
+
+  html{
+    scroll-padding-top:110px;
+  }
+}
