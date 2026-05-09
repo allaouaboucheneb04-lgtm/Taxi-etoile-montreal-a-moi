@@ -1,0 +1,7 @@
+Design admin refait:
+- Page connexion propre
+- Logo réduit et lisible
+- Cartes blanches professionnelles
+- Boutons arrondis alignés
+- Filtres responsive
+- Design mobile iPhone amélioré
