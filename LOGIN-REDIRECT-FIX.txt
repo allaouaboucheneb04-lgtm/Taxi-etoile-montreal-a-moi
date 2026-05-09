@@ -1,0 +1,4 @@
+Correction:
+- La page acces-admin-taxi-live.html utilise maintenant admin-login-fixed.js.
+- Après connexion, redirection vers admin.html.
+- Les anciens scripts de login qui pouvaient renvoyer vers index.html ont été retirés de la page connexion.
