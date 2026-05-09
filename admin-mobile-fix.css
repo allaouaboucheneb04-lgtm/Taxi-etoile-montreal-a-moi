@@ -1,0 +1,274 @@
+
+/* ADMIN MOBILE DESIGN FIX */
+:root{
+  --admin-bg:#0f172a;
+  --admin-card:#ffffff;
+  --admin-text:#111827;
+  --admin-muted:#64748b;
+  --admin-gold:#ffc107;
+  --admin-border:#e5e7eb;
+  --admin-radius:22px;
+  --admin-shadow:0 14px 40px rgba(0,0,0,.22);
+}
+
+body.admin-page,
+body.admin,
+body{
+  -webkit-text-size-adjust:100%;
+}
+
+.admin-shell,
+.admin-container,
+.dashboard,
+main,
+section{
+  max-width:1180px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.admin-filters,
+.filters,
+.filter-bar,
+.toolbar,
+.controls{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr)) !important;
+  gap:10px !important;
+  width:100% !important;
+  margin:16px 0 !important;
+}
+
+.admin-filters select,
+.admin-filters input,
+.filters select,
+.filters input,
+.filter-bar select,
+.filter-bar input,
+.toolbar select,
+.toolbar input,
+.controls select,
+.controls input,
+select,
+input,
+textarea{
+  width:100% !important;
+  max-width:100% !important;
+  min-height:48px !important;
+  border-radius:14px !important;
+  border:1px solid #d8dee8 !important;
+  background:#fff !important;
+  color:#111827 !important;
+  padding:10px 14px !important;
+  font-size:16px !important;
+  box-sizing:border-box !important;
+}
+
+.reservation-card,
+.course-card,
+.trip-card,
+.card,
+.reservation-item,
+.driver-card{
+  background:#ffffff !important;
+  color:#111827 !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:24px !important;
+  padding:18px !important;
+  margin:16px 10px !important;
+  box-shadow:0 14px 32px rgba(0,0,0,.16) !important;
+  overflow:hidden !important;
+}
+
+.reservation-card h2,
+.reservation-card h3,
+.course-card h2,
+.course-card h3,
+.trip-card h2,
+.trip-card h3,
+.card h2,
+.card h3,
+.reservation-item h2,
+.reservation-item h3{
+  color:#111827 !important;
+  line-height:1.15 !important;
+  margin:0 0 12px !important;
+  word-break:break-word !important;
+}
+
+.badge,
+.status,
+.pill,
+.tag{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:8px 12px !important;
+  border-radius:999px !important;
+  border:2px solid #ffc107 !important;
+  background:#111827 !important;
+  color:#fff !important;
+  font-weight:900 !important;
+  font-size:13px !important;
+  margin:4px 4px 4px 0 !important;
+  line-height:1.1 !important;
+}
+
+button,
+.btn,
+.action-btn,
+a.button{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  min-height:42px !important;
+  padding:9px 13px !important;
+  border-radius:999px !important;
+  border:0 !important;
+  background:#ffc107 !important;
+  color:#111827 !important;
+  font-weight:900 !important;
+  font-size:14px !important;
+  text-decoration:none !important;
+  margin:4px !important;
+  white-space:normal !important;
+  line-height:1.15 !important;
+}
+
+.actions,
+.action-row,
+.reservation-actions,
+.card-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  align-items:center !important;
+  margin:12px 0 !important;
+}
+
+.details,
+.course-details,
+.reservation-details{
+  background:#f8fafc !important;
+  border:1px solid #e5e7eb !important;
+  border-radius:18px !important;
+  padding:14px !important;
+  margin-top:12px !important;
+  color:#111827 !important;
+}
+
+.details p,
+.course-details p,
+.reservation-details p,
+.card p,
+.reservation-card p,
+.course-card p,
+.trip-card p{
+  margin:7px 0 !important;
+  line-height:1.35 !important;
+  color:#111827 !important;
+  word-break:break-word !important;
+}
+
+a{
+  word-break:break-word !important;
+}
+
+.admin-title,
+h1{
+  color:#ffc107 !important;
+  line-height:1.08 !important;
+  margin:18px 10px !important;
+}
+
+.admin-subtitle,
+.subtitle{
+  color:#e5e7eb !important;
+  margin:0 10px 14px !important;
+}
+
+.empty-state,
+.empty,
+.no-data{
+  background:rgba(255,255,255,.08) !important;
+  color:#fff !important;
+  border:1px dashed rgba(255,193,7,.35) !important;
+  border-radius:18px !important;
+  padding:18px !important;
+  margin:16px 10px !important;
+  text-align:center !important;
+}
+
+@media(max-width:700px){
+  body{
+    overflow-x:hidden !important;
+  }
+
+  .admin-shell,
+  .admin-container,
+  .dashboard,
+  main,
+  section{
+    width:100% !important;
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  .admin-filters,
+  .filters,
+  .filter-bar,
+  .toolbar,
+  .controls{
+    grid-template-columns:1fr !important;
+    gap:8px !important;
+    margin:12px 0 !important;
+  }
+
+  .reservation-card,
+  .course-card,
+  .trip-card,
+  .card,
+  .reservation-item,
+  .driver-card{
+    margin:14px 0 !important;
+    padding:16px !important;
+    border-radius:22px !important;
+  }
+
+  .actions,
+  .action-row,
+  .reservation-actions,
+  .card-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:8px !important;
+  }
+
+  .actions button,
+  .action-row button,
+  .reservation-actions button,
+  .card-actions button,
+  .actions a,
+  .action-row a,
+  .reservation-actions a,
+  .card-actions a{
+    width:100% !important;
+    margin:0 !important;
+    min-height:44px !important;
+  }
+
+  .badge,
+  .status,
+  .pill,
+  .tag{
+    font-size:12px !important;
+    padding:7px 10px !important;
+  }
+
+  .details,
+  .course-details,
+  .reservation-details{
+    padding:12px !important;
+  }
+}

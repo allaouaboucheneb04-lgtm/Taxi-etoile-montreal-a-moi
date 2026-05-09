@@ -1,0 +1,6 @@
+Correction design admin:
+- Filtres en colonnes propres sur mobile
+- Cartes de courses en fond blanc lisible
+- Boutons alignés en grille
+- Détails course dans un bloc propre
+- Texte/emails/adresses ne débordent plus
